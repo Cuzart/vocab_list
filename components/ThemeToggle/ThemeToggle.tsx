@@ -1,10 +1,16 @@
-import cx from 'clsx';
-import { ActionIcon, useMantineColorScheme, useComputedColorScheme, Group } from '@mantine/core';
+import {
+  ActionIcon,
+  useMantineColorScheme,
+  useComputedColorScheme,
+  Group,
+  Transition,
+} from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import classes from './ThemeToggle.module.css';
+import { rotate, rotateReverted } from '@/utils/animations';
 
 export function ThemeToggle() {
-  const { setColorScheme } = useMantineColorScheme();
+  const { setColorScheme, colorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   return (
@@ -17,8 +23,12 @@ export function ThemeToggle() {
         aria-label='Toggle color scheme'
         color='gray'
       >
-        <IconSun className={cx(classes.icon, classes.light)} stroke={1.5} />
-        <IconMoon className={cx(classes.icon, classes.dark)} stroke={1.5} />
+        <Transition mounted={colorScheme === 'light'} transition={rotate}>
+          {(style) => <IconSun style={style} />}
+        </Transition>
+        <Transition mounted={colorScheme === 'dark'} transition={rotateReverted}>
+          {(style) => <IconMoon style={style} />}
+        </Transition>
       </ActionIcon>
     </Group>
   );

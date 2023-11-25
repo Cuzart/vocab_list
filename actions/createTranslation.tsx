@@ -2,9 +2,15 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
-import { Translator } from 'deepl-node';
+import { SourceLanguageCode, TargetLanguageCode, Translator } from 'deepl-node';
 
-export async function createTranslation({ text, source, target }) {
+type Params = {
+  text: string;
+  source: string;
+  target: string;
+};
+
+export async function createTranslation({ text, source, target }: Params) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const {
@@ -14,7 +20,11 @@ export async function createTranslation({ text, source, target }) {
   const authKey = process.env.DEEPL_KEY!;
   const translator = new Translator(authKey);
 
-  const result = await translator.translateText(text, source, target);
+  const result = await translator.translateText(
+    text,
+    source as SourceLanguageCode,
+    target as TargetLanguageCode
+  );
 
   const newTranslation = {
     original: text,

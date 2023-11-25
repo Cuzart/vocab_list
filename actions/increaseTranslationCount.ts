@@ -3,7 +3,12 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
-export async function increaseTranslationCount({ id, count }) {
+type Params = {
+  id: number;
+  count: number;
+};
+
+export async function increaseTranslationCount({ id, count }: Params) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 

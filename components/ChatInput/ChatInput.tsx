@@ -1,14 +1,5 @@
-'use client';
-
 import { ActionIcon, Group, TextInput } from '@mantine/core';
-import {
-  IconArrowNarrowRight,
-  IconCamera,
-  IconPhoto,
-  IconPhotoUp,
-  IconPlus,
-  IconSend,
-} from '@tabler/icons-react';
+import { IconArrowNarrowRight } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import classes from './ChatInput.module.css';
 import { getHotkeyHandler } from '@mantine/hooks';
@@ -37,7 +28,7 @@ export const ChatInput = ({ language }: ChatInputProps) => {
         classNames={{ input: classes.input }}
         size='lg'
         w={'100%'}
-        radius={'md'}
+        radius={'sm'}
         rightSection={
           <ActionIcon
             radius={6}

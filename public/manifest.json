@@ -1,0 +1,9 @@
+{
+  "name": "Vocabulist",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#7352E9",
+  "start_url": "/",
+  "short_name": "Vocabulist"
+}

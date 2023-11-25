@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UnstyledButton, Menu, Group } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 import images from './images';
 import classes from './CountryPicker.module.css';
+import { LanguageEnum } from '@/types';
 
 const data = [
   { value: 'en', label: 'English', image: images.en },
@@ -11,12 +12,25 @@ const data = [
   { value: 'it', label: 'Italian', image: images.it },
   { value: 'pl', label: 'Polish', image: images.pl },
   { value: 'ru', label: 'Russian', image: images.ru },
-  // { value: 'de', label: 'German', image: images.de },
+  { value: 'de', label: 'German', image: images.de },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
-export function CountryPicker({ language, setLanguage }) {
+type Props = {
+  language: LanguageEnum;
+  setLanguage: (language: LanguageEnum) => void;
+};
+
+export function CountryPicker({ language, setLanguage }: Props) {
   const [opened, setOpened] = useState(false);
-  const [selected, setSelected] = useState(data.find((item) => item.value === language));
+  const [selected, setSelected] = useState(data[0]);
+
+  useEffect(() => {
+    const item = data.find((item) => item.value === language);
+    if (item) {
+      setSelected(item);
+    }
+  }, [language]);
+
   const items = data.map((item) => (
     <Menu.Item
       leftSection={
@@ -24,7 +38,7 @@ export function CountryPicker({ language, setLanguage }) {
       }
       onClick={() => {
         setSelected(item);
-        setLanguage(item.value);
+        setLanguage(item.value as LanguageEnum);
       }}
       key={item.label}
     >
@@ -39,19 +53,20 @@ export function CountryPicker({ language, setLanguage }) {
       radius='md'
       width='target'
       withinPortal
+      transitionProps={{ transition: 'scale-y' }}
     >
       <Menu.Target>
         <UnstyledButton className={classes.control} data-expanded={opened || undefined}>
           <Group gap='xs'>
             <img
-              src={selected.image}
-              alt={selected.label}
+              src={selected?.image}
+              alt={selected?.label}
               width={22}
               height={22}
               className={classes.flag}
             />
 
-            <span className={classes.label}>{selected.label}</span>
+            <span className={classes.label}>{selected?.label}</span>
           </Group>
           <IconChevronDown size='1rem' className={classes.icon} stroke={1.5} />
         </UnstyledButton>

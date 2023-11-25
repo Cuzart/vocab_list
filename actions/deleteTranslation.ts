@@ -3,7 +3,11 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
-export async function deleteTranslation({ id }) {
+type Params = {
+  id: number;
+};
+
+export async function deleteTranslation({ id }: Params) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 

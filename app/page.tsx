@@ -1,12 +1,10 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
-import { Box, Container, Flex, Stack, Text, Title } from '@mantine/core';
-import { TranslationItem } from '@/components/TranslationItem/TranslationItem';
-import { ChatInput } from '@/components/ChatInput/ChatInput';
-import { CountryPicker } from '@/components/CountryPicker/CountryPicker';
-import { HideToggle } from '@/components/HideToggle/HideToggle';
-import { ThemeToggle } from '@/components/ThemeToggle/ThemeToggle';
+import { Container } from '@mantine/core';
 import { AppContent } from '@/components/AppContent';
+import { TranslationEntry } from '@/types';
+
+export const dynamic = 'force-dynamic';
 
 export default async function Index() {
   const cookieStore = cookies();
@@ -15,7 +13,8 @@ export default async function Index() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const { data: notes, error } = await supabase
+
+  const { data: entries } = await supabase
     .from('translations')
     .select('*')
     .eq('created_by', user?.id);
@@ -23,7 +22,7 @@ export default async function Index() {
   return (
     <main>
       <Container pos={'relative'}>
-        <AppContent notes={notes} />
+        <AppContent entries={entries as TranslationEntry[]} />
       </Container>
     </main>
   );

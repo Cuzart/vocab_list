@@ -1,9 +1,15 @@
-import { ActionIcon } from '@mantine/core';
+import { ActionIcon, Transition } from '@mantine/core';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import React from 'react';
 import classes from './HideToggle.module.css';
+import { rotate, rotateReverted } from '@/utils/animations';
 
-export const HideToggle = ({ hidden, setHidden }) => {
+type Props = {
+  hidden: boolean;
+  setHidden: (hidden: boolean) => void;
+};
+
+export const HideToggle = ({ hidden, setHidden }: Props) => {
   return (
     <ActionIcon
       className={classes.button}
@@ -12,7 +18,12 @@ export const HideToggle = ({ hidden, setHidden }) => {
       onClick={() => setHidden(!hidden)}
       variant='outline'
     >
-      {hidden ? <IconEye /> : <IconEyeOff />}
+      <Transition mounted={hidden} transition={rotate}>
+        {(style) => <IconEye style={style} />}
+      </Transition>
+      <Transition mounted={!hidden} transition={rotateReverted}>
+        {(style) => <IconEyeOff style={style} />}
+      </Transition>
     </ActionIcon>
   );
 };

@@ -17,19 +17,21 @@ const config = {
   touchEventOptions: { passive: true }, // options for touch listeners (*See Details*)
 };
 
+type Props = {
+  id: number;
+  original: string;
+  translation: string;
+  visible?: boolean;
+  count?: number;
+};
+
 export const TranslationItem = ({
   id,
   original,
   translation,
   visible,
   count: initialCount,
-}: {
-  id: string;
-  original: string;
-  translation: string;
-  visible?: boolean;
-  count?: number;
-}) => {
+}: Props) => {
   const router = useRouter();
   const [opened, setOpened] = React.useState(false);
   const [count, setCount] = React.useState(initialCount || 0);
@@ -78,7 +80,6 @@ export const TranslationItem = ({
         className={classes.paper}
         p={10}
         px={20}
-        onClick={() => {}}
         style={{ transform: `translateX(-${offset}px)` }}
       >
         <Flex key={original} align={'center'} justify={'space-between'}>
