@@ -1,0 +1,24 @@
+.container {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  gap: 0.5rem;
+
+  z-index: 600;
+
+  padding-top: 1rem;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  padding-left: calc(env(safe-area-inset-left) + 0.5rem);
+  padding-right: calc(env(safe-area-inset-right) + 0.5rem);
+}
+
+.dropdown {
+  border: none;
+  background: transparent;
+}
+
+.input:focus-within {
+  outline: rem(2px) solid var(--mantine-color-violet-6);
+  border-color: transparent;
+}
