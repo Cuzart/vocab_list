@@ -1,10 +1,9 @@
-import Link from 'next/link';
 import { headers, cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { Box, Button, Center, Container, PasswordInput, TextInput, Title } from '@mantine/core';
 
-export default function Login({ searchParams }: { searchParams: { message: string } }) {
+export default async function Login({ searchParams }: { searchParams: { message: string } }) {
   const signIn = async (formData: FormData) => {
     'use server';
 
@@ -49,6 +48,15 @@ export default function Login({ searchParams }: { searchParams: { message: strin
     return redirect('/login?message=Check email to continue sign in process');
   };
 
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) redirect('/');
+
   return (
     <main>
       <Container pos={'relative'}>
@@ -59,7 +67,9 @@ export default function Login({ searchParams }: { searchParams: { message: strin
             </Title>
             <TextInput mb={20} label='Email' name='email' required />
             <PasswordInput mb={30} label='Passwort' name='password' required />
-            <Button fullWidth>Sign In</Button>
+            <Button type='submit' fullWidth>
+              Sign In
+            </Button>
             {/* <Button formAction={signUp}>Sign Up</Button> */}
 
             {searchParams?.message && (

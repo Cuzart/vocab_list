@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { Container } from '@mantine/core';
 import { AppContent } from '@/components/AppContent';
 import { TranslationEntry } from '@/types';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,6 +19,8 @@ export default async function Index() {
     .from('translations')
     .select('*')
     .eq('created_by', user?.id);
+
+  if (!user) redirect('/login');
 
   return (
     <main>
