@@ -76,11 +76,9 @@ export default async function Login({ searchParams }: { searchParams: { message:
             </Title>
             <TextInput mb={20} label='Email' name='email' required />
             <PasswordInput mb={30} label='Passwort' name='password' required />
-            <Button type='submit' fullWidth>
-              Sign In
-            </Button>
-            {/* <Button formAction={signUp}>Sign Up</Button> */}
 
+            {/* <Button formAction={signUp}>Sign Up</Button> */}
+            <Button fullWidth>Sign In</Button>
             {searchParams?.message && <Text>{searchParams.message}</Text>}
           </Box>
         </Center>
