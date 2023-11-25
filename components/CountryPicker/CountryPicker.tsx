@@ -12,7 +12,7 @@ const data = [
   { value: 'it', label: 'Italian', image: images.it },
   { value: 'pl', label: 'Polish', image: images.pl },
   { value: 'ru', label: 'Russian', image: images.ru },
-  { value: 'de', label: 'German', image: images.de },
+  // { value: 'de', label: 'German', image: images.de },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 type Props = {

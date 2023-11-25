@@ -1,11 +1,6 @@
 import { createClient } from '@/utils/supabase/middleware';
 import { NextRequest } from 'next/server';
 
-export const config = {
-  matcher:
-    '/((?!api|_next/static|_next/image|favicon.ico|[-A-Za-z\\d_]+.png|[-A-Za-z\\d_]+.jpg|manifest.json).*)',
-};
-
 export async function middleware(req: NextRequest) {
   const { supabase, response } = createClient(req);
 

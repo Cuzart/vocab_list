@@ -62,9 +62,10 @@ export const TranslationItem = ({
       setOffsetContainer(0);
     },
 
-    onTap: () => {
-      setOpened(!opened);
-    },
+    // onTap: (e) => {
+    //   console.log(e);
+    //   setOpened(!opened);
+    // },
 
     ...config,
   });
@@ -81,6 +82,7 @@ export const TranslationItem = ({
         p={10}
         px={20}
         style={{ transform: `translateX(-${offset}px)` }}
+        onClick={() => setOpened(!opened)}
       >
         <Flex key={original} align={'center'} justify={'space-between'}>
           <div>
@@ -97,6 +99,7 @@ export const TranslationItem = ({
             px={6}
             onClick={async (e) => {
               e.stopPropagation();
+              e.preventDefault();
               const oldCount = count;
               setCount(oldCount + 1);
               const res = await increaseTranslationCount({ id: id, count: oldCount + 1 });

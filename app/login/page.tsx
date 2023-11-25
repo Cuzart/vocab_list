@@ -1,7 +1,16 @@
 import { headers, cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { Box, Button, Center, Container, PasswordInput, TextInput, Title } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  PasswordInput,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
 
 export default async function Login({ searchParams }: { searchParams: { message: string } }) {
   const signIn = async (formData: FormData) => {
@@ -72,11 +81,7 @@ export default async function Login({ searchParams }: { searchParams: { message:
             </Button>
             {/* <Button formAction={signUp}>Sign Up</Button> */}
 
-            {searchParams?.message && (
-              <p className='mt-4 p-4 bg-foreground/10 text-foreground text-center'>
-                {searchParams.message}
-              </p>
-            )}
+            {searchParams?.message && <Text>{searchParams.message}</Text>}
           </Box>
         </Center>
       </Container>

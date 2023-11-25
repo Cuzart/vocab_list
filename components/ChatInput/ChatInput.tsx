@@ -37,7 +37,10 @@ export const ChatInput = ({ language }: ChatInputProps) => {
             color={isReadyToBeSent ? 'violet.4' : 'gray.4'}
             opacity={1}
             onClick={() => handleSubmit()}
-            style={{ transition: 'all 0.2s ease' }}
+            style={{
+              transition: 'all 0.2s ease',
+              transform: isReadyToBeSent ? 'translateX(0px)' : 'translateX(-4px)',
+            }}
           >
             <IconArrowNarrowRight />
           </ActionIcon>
