@@ -76,7 +76,12 @@ export const AppContent = ({ entries }: Props) => {
           </Flex>
         </Group>
 
-        <Stack className={classes.stack} mt={0} pb={10} mih={`calc(100vh - 62px)`}>
+        <Stack
+          className={classes.stack}
+          mt={0}
+          pb={10}
+          mih={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
+        >
           {filteredEntries?.map((note) => (
             <TranslationItem
               id={note.id}
