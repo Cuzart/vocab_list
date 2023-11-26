@@ -7,10 +7,9 @@ import {
 } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import classes from './ThemeToggle.module.css';
-import { rotate, rotateReverted } from '@/utils/animations';
 
 export function ThemeToggle() {
-  const { setColorScheme, colorScheme } = useMantineColorScheme();
+  const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   return (
@@ -23,12 +22,8 @@ export function ThemeToggle() {
         aria-label='Toggle color scheme'
         color='gray'
       >
-        <Transition mounted={colorScheme === 'light'} transition={rotate}>
-          {(style) => <IconSun style={style} />}
-        </Transition>
-        <Transition mounted={colorScheme === 'dark'} transition={rotateReverted}>
-          {(style) => <IconMoon style={style} />}
-        </Transition>
+        <IconSun className={[classes.icon, classes.rotate].join(' ')} />
+        <IconMoon className={[classes.icon, classes.rotateReverted].join(' ')} />
       </ActionIcon>
     </Group>
   );

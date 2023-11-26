@@ -1,7 +1,7 @@
 'use client';
 
-import { Box, Flex, Group, ScrollArea, Stack, Text, ThemeIcon, Title } from '@mantine/core';
-import React, { useState } from 'react';
+import { Box, Flex, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { HideToggle } from '../HideToggle/HideToggle';
 import { CountryPicker } from '../CountryPicker/CountryPicker';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
@@ -23,12 +23,36 @@ export const AppContent = ({ entries }: Props) => {
     defaultValue: 'en',
   });
 
-  const filteredEntries = entries
-    ?.filter((entry) => entry.language === language)
-    ?.sort((a, b) => b.count - a.count);
+  const filteredEntries = useMemo(
+    () =>
+      entries?.filter((entry) => entry.language === language)?.sort((a, b) => b.count - a.count),
+    [entries, language]
+  );
 
   const matches = useMediaQuery('(min-width: 640px)');
-  const [scroll] = useWindowScroll();
+
+  const isScrolledDownRef = useRef(false);
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
+  // to avoid using scroll position as state which causes unnecessary rerenders
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10 && !isScrolledDownRef.current) {
+        isScrolledDownRef.current = true;
+        setIsScrolledDown(true);
+      }
+      if (window.scrollY <= 10 && isScrolledDownRef.current) {
+        isScrolledDownRef.current = false;
+        setIsScrolledDown(false);
+      }
+    };
+
+    document.addEventListener('scroll', handleScroll);
+
+    return () => {
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <Box pos={'relative'} px={20}>
@@ -37,7 +61,7 @@ export const AppContent = ({ entries }: Props) => {
           mt={30}
           justify={'space-between'}
           mb={30}
-          data-compact={scroll.y > 10 ? 'true' : 'false'}
+          data-compact={isScrolledDown ? 'true' : 'false'}
         >
           <Flex align={'center'} gap={5}>
             <ThemeIcon size={40} variant='transparent'>

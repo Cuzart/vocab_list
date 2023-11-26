@@ -8,7 +8,7 @@ export const rotate: MantineTransition = {
 };
 export const rotateReverted: MantineTransition = {
   in: { opacity: 1, transform: 'translate(-50%, -50%) rotate(360deg)' },
-  out: { opacity: 0, transform: 'translate(-50%, -50%) rotate(240deg)' },
+  out: { opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg)' },
   common: { position: 'absolute', top: '50%', left: '50%' },
   transitionProperty: 'transform, opacity',
 };
