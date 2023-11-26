@@ -19,7 +19,7 @@ export function ThemeToggle() {
         className={classes.button}
         onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
         variant='outline'
-        size='xl'
+        size={40}
         aria-label='Toggle color scheme'
         color='gray'
       >

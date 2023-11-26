@@ -67,24 +67,20 @@ export default async function Login({ searchParams }: { searchParams: { message:
   if (user) redirect('/');
 
   return (
-    <main>
-      <Container pos={'relative'}>
-        <Center component='form' h={'100dvh'} w={'100%'} py={160} action={signIn}>
-          <Box w={'500px'}>
-            <Title ta={'center'} mb={30}>
-              Login
-            </Title>
-            <TextInput mb={20} label='Email' name='email' required />
-            <PasswordInput mb={30} label='Passwort' name='password' required />
+    <Center component='form' h={'100dvh'} w={'100%'} py={160} action={signIn}>
+      <Box w={'500px'}>
+        <Title ta={'center'} mb={30}>
+          Login
+        </Title>
+        <TextInput mb={20} label='Email' name='email' required />
+        <PasswordInput mb={30} label='Passwort' name='password' required />
 
-            {/* <Button formAction={signUp}>Sign Up</Button> */}
-            <Button type='submit' fullWidth>
-              Sign In
-            </Button>
-            {searchParams?.message && <Text>{searchParams.message}</Text>}
-          </Box>
-        </Center>
-      </Container>
-    </main>
+        {/* <Button formAction={signUp}>Sign Up</Button> */}
+        <Button type='submit' fullWidth>
+          Sign In
+        </Button>
+        {searchParams?.message && <Text>{searchParams.message}</Text>}
+      </Box>
+    </Center>
   );
 }

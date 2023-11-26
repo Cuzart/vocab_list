@@ -2,7 +2,7 @@ import { GeistSans } from 'geist/font/sans';
 import { Eczar as HeadingFont } from 'next/font/google';
 import { Lexend_Deca as BodyFont } from 'next/font/google';
 import './globals.css';
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, Container, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 
 const defaultUrl = process.env.VERCEL_URL
@@ -16,6 +16,7 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'Vocabulist',
   description: 'Quick management of your vocabulary',
+  viewport: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -37,11 +38,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             fontFamily: bodyFont.style.fontFamily,
             headings: {
               fontFamily: headingFont.style.fontFamily,
-              sizes: { h1: { fontSize: '38px' } },
+              sizes: { h1: { fontSize: '2.375rem' } },
             },
           }}
         >
-          {children}
+          <main>
+            <Container pos={'relative'} p={0}>
+              {children}
+            </Container>
+          </main>
         </MantineProvider>
       </body>
     </html>

@@ -1,5 +1,5 @@
 .control {
-  width: rem(140px);
+  width: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -8,6 +8,7 @@
   border: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-6));
   transition: background-color 150ms ease;
   background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+  height: 2.5rem;
 }
 
 .control:hover {
@@ -22,6 +23,7 @@
 .label {
   font-weight: 500;
   font-size: var(--mantine-font-size-sm);
+  padding-right: 6px;
 }
 
 .icon {

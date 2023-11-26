@@ -1,0 +1,37 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9));
+  width: 100%;
+  max-width: 57.5rem;
+  margin: 0rem !important;
+  padding: 1.25rem;
+
+  transition: padding 200ms linear;
+  h1 {
+    font-size: 2.25rem;
+    transition: font-size 200ms ease;
+  }
+
+  &[data-compact='true'] {
+    padding-bottom: 5px;
+    padding-top: calc(env(safe-area-inset-bottom) + 5px);
+
+    h1 {
+      font-size: 2rem;
+    }
+  }
+
+  @media (min-width: em(920px)) {
+    padding-left: 0px;
+    padding-right: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.stack {
+  padding-top: 100px;
+}

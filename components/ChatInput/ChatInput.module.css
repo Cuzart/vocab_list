@@ -7,13 +7,16 @@
 
   z-index: 600;
 
-  padding-top: 1rem;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
-  padding-left: calc(env(safe-area-inset-left) + 0.5rem);
-  padding-right: calc(env(safe-area-inset-right) + 0.5rem);
+  padding-top: 0.625rem;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.625rem);
+  padding-left: calc(env(safe-area-inset-left));
+  padding-right: calc(env(safe-area-inset-right));
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9));
+
+  transition: padding 200ms ease;
 }
 
-.dropdown {
+.container .dropdown {
   border: none;
   background: transparent;
 }

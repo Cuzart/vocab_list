@@ -5,6 +5,7 @@ import classes from './ChatInput.module.css';
 import { getHotkeyHandler } from '@mantine/hooks';
 import { createTranslation } from '../../actions/createTranslation';
 import { useRouter } from 'next/navigation';
+import { countryData } from '../CountryPicker/CountryPicker';
 
 type ChatInputProps = { language: string };
 
@@ -26,13 +27,14 @@ export const ChatInput = ({ language }: ChatInputProps) => {
     <Group className={classes.container} wrap='nowrap' gap={0}>
       <TextInput
         classNames={{ input: classes.input }}
-        size='lg'
+        placeholder={'Wort auf ' + countryData.find((c) => c.value === language)?.label}
+        size='md'
         w={'100%'}
         radius={'sm'}
         rightSection={
           <ActionIcon
             radius={6}
-            size={'xl'}
+            size={'lg'}
             variant={isReadyToBeSent ? 'light' : 'transparent'}
             color={isReadyToBeSent ? 'violet.4' : 'gray.4'}
             opacity={1}

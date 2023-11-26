@@ -13,7 +13,7 @@ export const HideToggle = ({ hidden, setHidden }: Props) => {
   return (
     <ActionIcon
       className={classes.button}
-      size={'xl'}
+      size={40}
       color='gray'
       onClick={() => setHidden(!hidden)}
       variant='outline'

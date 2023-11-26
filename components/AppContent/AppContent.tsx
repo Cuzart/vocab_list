@@ -1,15 +1,16 @@
 'use client';
 
-import { Box, Flex, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
-import React from 'react';
-import { HideToggle } from './HideToggle/HideToggle';
-import { CountryPicker } from './CountryPicker/CountryPicker';
-import { ThemeToggle } from './ThemeToggle/ThemeToggle';
-import { TranslationItem } from './TranslationItem/TranslationItem';
-import { ChatInput } from './ChatInput/ChatInput';
-import { useLocalStorage } from '@mantine/hooks';
+import { Box, Flex, Group, ScrollArea, Stack, Text, ThemeIcon, Title } from '@mantine/core';
+import React, { useState } from 'react';
+import { HideToggle } from '../HideToggle/HideToggle';
+import { CountryPicker } from '../CountryPicker/CountryPicker';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
+import { TranslationItem } from '../TranslationItem/TranslationItem';
+import { ChatInput } from '../ChatInput/ChatInput';
+import { useLocalStorage, useMediaQuery, useWindowScroll } from '@mantine/hooks';
 import { IconVocabulary } from '@tabler/icons-react';
 import { LanguageEnum, TranslationEntry } from '@/types';
+import classes from './AppContent.module.css';
 
 type Props = {
   entries: TranslationEntry[];
@@ -26,15 +27,23 @@ export const AppContent = ({ entries }: Props) => {
     ?.filter((entry) => entry.language === language)
     ?.sort((a, b) => b.count - a.count);
 
+  const matches = useMediaQuery('(min-width: 640px)');
+  const [scroll] = useWindowScroll();
   return (
     <>
-      <Box pt={60} h={'calc(100vh - 82px)'}>
-        <Group justify={'space-between'} mb={50}>
+      <Box pos={'relative'} px={20}>
+        <Group
+          className={classes.header}
+          mt={30}
+          justify={'space-between'}
+          mb={30}
+          data-compact={scroll.y > 10 ? 'true' : 'false'}
+        >
           <Flex align={'center'} gap={5}>
             <ThemeIcon size={40} variant='transparent'>
               <IconVocabulary size={36} />
             </ThemeIcon>
-            <Title>Vocabulist</Title>
+            {matches && <Title>Vocabulist</Title>}
           </Flex>
           <Flex gap={10}>
             <HideToggle hidden={hidden} setHidden={setHidden} />
@@ -43,7 +52,7 @@ export const AppContent = ({ entries }: Props) => {
           </Flex>
         </Group>
 
-        <Stack mt={30}>
+        <Stack className={classes.stack} mt={0} pb={10} mih={`calc(100vh - 62px)`}>
           {filteredEntries?.map((note) => (
             <TranslationItem
               id={note.id}
@@ -57,8 +66,8 @@ export const AppContent = ({ entries }: Props) => {
         </Stack>
 
         {filteredEntries?.length === 0 && <Text ta='center'>Keine Einträge</Text>}
+        <ChatInput language={language} />
       </Box>
-      <ChatInput language={language} />
     </>
   );
 };

@@ -1,9 +1,10 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
-import { Container } from '@mantine/core';
-import { AppContent } from '@/components/AppContent';
+import { Box, Container } from '@mantine/core';
+import { AppContent } from '@/components/AppContent/AppContent';
 import { TranslationEntry } from '@/types';
 import { redirect } from 'next/navigation';
+import { ChatInput } from '@/components/ChatInput/ChatInput';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,11 +23,5 @@ export default async function Index() {
 
   if (!user) redirect('/login');
 
-  return (
-    <main>
-      <Container pos={'relative'}>
-        <AppContent entries={entries as TranslationEntry[]} />
-      </Container>
-    </main>
-  );
+  return <AppContent entries={entries as TranslationEntry[]} />;
 }

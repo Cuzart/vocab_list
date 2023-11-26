@@ -5,13 +5,13 @@ import images from './images';
 import classes from './CountryPicker.module.css';
 import { LanguageEnum } from '@/types';
 
-const data = [
-  { value: 'en', label: 'English', image: images.en },
-  { value: 'fr', label: 'French', image: images.fr },
-  { value: 'es', label: 'Spanish', image: images.es },
-  { value: 'it', label: 'Italian', image: images.it },
-  { value: 'pl', label: 'Polish', image: images.pl },
-  { value: 'ru', label: 'Russian', image: images.ru },
+export const countryData = [
+  { value: 'en', label: 'Englisch', image: images.en },
+  { value: 'fr', label: 'Französisch', image: images.fr },
+  { value: 'es', label: 'Spanisch', image: images.es },
+  { value: 'it', label: 'Italienisch', image: images.it },
+  { value: 'pl', label: 'Polnisch', image: images.pl },
+  { value: 'ru', label: 'Russisch', image: images.ru },
   // { value: 'de', label: 'German', image: images.de },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
@@ -22,16 +22,16 @@ type Props = {
 
 export function CountryPicker({ language, setLanguage }: Props) {
   const [opened, setOpened] = useState(false);
-  const [selected, setSelected] = useState(data[0]);
+  const [selected, setSelected] = useState(countryData[0]);
 
   useEffect(() => {
-    const item = data.find((item) => item.value === language);
+    const item = countryData.find((item) => item.value === language);
     if (item) {
       setSelected(item);
     }
   }, [language]);
 
-  const items = data.map((item) => (
+  const items = countryData.map((item) => (
     <Menu.Item
       leftSection={
         <img src={item.image} alt={item.label} width={22} height={22} className={classes.flag} />
