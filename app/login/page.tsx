@@ -68,7 +68,7 @@ export default async function Login({ searchParams }: { searchParams: { message:
   if (user) redirect('/');
 
   return (
-    <Center component='form' h={'100dvh'} w={'100%'} py={160} action={signIn}>
+    <Center component='form' h={'100dvh'} w={'100%'} py={160} px={20} action={signIn}>
       <Box w={'500px'}>
         <Title ta={'center'} mb={30}>
           Login
