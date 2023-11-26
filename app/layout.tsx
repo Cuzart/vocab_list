@@ -1,6 +1,6 @@
 import { GeistSans } from 'geist/font/sans';
 import { Eczar as HeadingFont } from 'next/font/google';
-import { Lexend_Deca as BodyFont } from 'next/font/google';
+import { Space_Grotesk as BodyFont } from 'next/font/google';
 import './globals.css';
 import { ColorSchemeScript, Container, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
