@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import {
@@ -33,29 +33,30 @@ export default async function Login({ searchParams }: { searchParams: { message:
     return redirect('/');
   };
 
-  // const signUp = async (formData: FormData) => {
-  //   'use server';
+  const signUp = async (formData: FormData) => {
+    'use server';
 
-  //   const origin = headers().get('origin');
-  //   const email = formData.get('email') as string;
-  //   const password = formData.get('password') as string;
-  //   const cookieStore = cookies();
-  //   const supabase = createClient(cookieStore);
+    console.log('first');
+    const origin = headers().get('origin');
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
 
-  //   const { error } = await supabase.auth.signUp({
-  //     email,
-  //     password,
-  //     options: {
-  //       emailRedirectTo: `${origin}/auth/callback`,
-  //     },
-  //   });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${origin}/auth/callback`,
+      },
+    });
 
-  //   if (error) {
-  //     return redirect('/login?message=Could not authenticate user');
-  //   }
+    if (error) {
+      return redirect('/login?message=Could not authenticate user');
+    }
 
-  //   return redirect('/login?message=Check email to continue sign in process');
-  // };
+    return redirect('/login?message=Check email to continue sign in process');
+  };
 
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -75,9 +76,11 @@ export default async function Login({ searchParams }: { searchParams: { message:
         <TextInput mb={20} label='Email' name='email' required />
         <PasswordInput mb={30} label='Passwort' name='password' required />
 
-        {/* <Button formAction={signUp}>Sign Up</Button> */}
-        <Button type='submit' fullWidth>
+        <Button type='submit' fullWidth mb={20}>
           Sign In
+        </Button>
+        <Button type='submit' formAction={signUp} variant='subtle' fullWidth>
+          Sign Up
         </Button>
         {searchParams?.message && <Text>{searchParams.message}</Text>}
       </Box>

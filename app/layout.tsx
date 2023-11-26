@@ -4,6 +4,7 @@ import { Lexend_Deca as BodyFont } from 'next/font/google';
 import './globals.css';
 import { ColorSchemeScript, Container, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { Viewport } from 'next';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -16,7 +17,16 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'Vocabulist',
   description: 'Quick management of your vocabulary',
-  viewport: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'cyan' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
+  initialScale: 1,
+  viewportFit: 'cover',
+  width: 'device-width',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -25,10 +35,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel='manifest' href='/manifest.json' />
         <link rel='apple-touch-icon' href='/apple-icon-152x.png' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0, viewport-fit=cover' />
         <meta name='apple-mobile-web-app-capable' content='yes' />
-        <meta name='theme-color' content='#151515' media='(prefers-color-scheme: dark)' />
-        <meta name='theme-color' content='#F2F2F2' media='(prefers-color-scheme: light)' />
+
         <ColorSchemeScript />
       </head>
       <body>

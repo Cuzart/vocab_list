@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
+import { Box, Center, Flex, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { HideToggle } from '../HideToggle/HideToggle';
 import { CountryPicker } from '../CountryPicker/CountryPicker';
@@ -87,9 +87,13 @@ export const AppContent = ({ entries }: Props) => {
               count={note.count}
             />
           ))}
+          {filteredEntries?.length === 0 && (
+            <Center h={'75vh'} ta='center'>
+              Keine Einträge
+            </Center>
+          )}
         </Stack>
 
-        {filteredEntries?.length === 0 && <Text ta='center'>Keine Einträge</Text>}
         <ChatInput language={language} />
       </Box>
     </>
