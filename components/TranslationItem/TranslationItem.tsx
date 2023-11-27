@@ -38,7 +38,6 @@ type Props = {
 };
 
 export const TranslationItem = ({
-  index,
   id,
   original,
   translation,
@@ -60,6 +59,7 @@ export const TranslationItem = ({
     let previous: TranslationEntry[] = [];
 
     setEntries((prevState) => {
+      const index = prevState!.findIndex((entry) => entry.id === id);
       previous = prevState!;
       const newEntries = [...prevState!];
       newEntries.splice(index, 1);

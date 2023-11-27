@@ -24,7 +24,10 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
   });
 
   const [entries, setEntries] = useState<TranslationEntry[] | undefined>(initialEntries);
-  const filteredEntries = entries;
+  const filteredEntries = useMemo(
+    () => entries?.filter((entry) => entry.language === language),
+    [entries, language]
+  );
 
   const matches = useMediaQuery('(min-width: 640px)');
 
@@ -79,9 +82,8 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
           pb={10}
           mih={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
         >
-          {filteredEntries?.map((note, index) => (
+          {filteredEntries?.map((note) => (
             <TranslationItem
-              index={index}
               id={note.id}
               key={note.original}
               original={note.original}
