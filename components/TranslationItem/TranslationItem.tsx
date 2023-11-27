@@ -28,7 +28,6 @@ const config = {
 };
 
 type Props = {
-  index: number;
   id: number;
   original: string;
   translation: string;
