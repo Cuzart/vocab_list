@@ -33,10 +33,14 @@ export async function createTranslation({ text, source, target }: Params) {
     language: source,
   };
 
-  const { error } = await supabase.from('translations').insert(newTranslation);
+  const { data, error } = await supabase
+    .from('translations')
+    .insert(newTranslation)
+    .select('*')
+    .single();
   if (error) {
     return false;
   }
 
-  return true;
+  return data;
 }

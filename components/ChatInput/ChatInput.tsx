@@ -4,13 +4,15 @@ import React, { useState } from 'react';
 import classes from './ChatInput.module.css';
 import { getHotkeyHandler } from '@mantine/hooks';
 import { createTranslation } from '../../actions/createTranslation';
-import { useRouter } from 'next/navigation';
 import { countryData } from '../CountryPicker/CountryPicker';
+import { TranslationEntry } from '@/types';
 
-type ChatInputProps = { language: string };
+type ChatInputProps = {
+  language: string;
+  setEntries: React.Dispatch<React.SetStateAction<TranslationEntry[] | undefined>>;
+};
 
-export const ChatInput = ({ language }: ChatInputProps) => {
-  const router = useRouter();
+export const ChatInput = ({ language, setEntries }: ChatInputProps) => {
   const [message, setMessage] = useState('');
 
   const isReadyToBeSent = message.length > 0;
@@ -18,8 +20,25 @@ export const ChatInput = ({ language }: ChatInputProps) => {
   const handleSubmit = async () => {
     if (isReadyToBeSent) {
       setMessage('');
+
+      setEntries((prevState) => [
+        ...prevState!,
+        {
+          original: message,
+          translation: '...',
+          created_by: '1',
+          language: language,
+        } as TranslationEntry,
+      ]);
       const res = await createTranslation({ text: message, source: language, target: 'de' });
-      res && router.refresh();
+      if (res) {
+        setEntries((prevState) => {
+          const newEntries = [...prevState!];
+          newEntries.pop();
+          newEntries.push(res as TranslationEntry);
+          return newEntries;
+        });
+      }
     }
   };
 

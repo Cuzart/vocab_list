@@ -1,13 +1,13 @@
 'use client';
 
-import { Box, Center, Flex, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
+import { Box, Center, Flex, Group, Stack, ThemeIcon, Title, Transition } from '@mantine/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { HideToggle } from '../HideToggle/HideToggle';
 import { CountryPicker } from '../CountryPicker/CountryPicker';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { TranslationItem } from '../TranslationItem/TranslationItem';
 import { ChatInput } from '../ChatInput/ChatInput';
-import { useLocalStorage, useMediaQuery, useWindowScroll } from '@mantine/hooks';
+import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
 import { IconVocabulary } from '@tabler/icons-react';
 import { LanguageEnum, TranslationEntry } from '@/types';
 import classes from './AppContent.module.css';
@@ -16,18 +16,15 @@ type Props = {
   entries: TranslationEntry[];
 };
 
-export const AppContent = ({ entries }: Props) => {
+export const AppContent = ({ entries: initialEntries }: Props) => {
   const [hidden, setHidden] = useLocalStorage({ key: 'hidden', defaultValue: true });
   const [language, setLanguage] = useLocalStorage<LanguageEnum>({
     key: 'language',
     defaultValue: 'en',
   });
 
-  const filteredEntries = useMemo(
-    () =>
-      entries?.filter((entry) => entry.language === language)?.sort((a, b) => b.count - a.count),
-    [entries, language]
-  );
+  const [entries, setEntries] = useState<TranslationEntry[] | undefined>(initialEntries);
+  const filteredEntries = entries;
 
   const matches = useMediaQuery('(min-width: 640px)');
 
@@ -64,10 +61,10 @@ export const AppContent = ({ entries }: Props) => {
           data-compact={isScrolledDown ? 'true' : 'false'}
         >
           <Flex align={'center'} gap={5}>
-            <ThemeIcon size={40} variant='transparent'>
+            <ThemeIcon size={36} variant='transparent'>
               <IconVocabulary size={36} />
             </ThemeIcon>
-            {matches && <Title>Vocabulist</Title>}
+            {matches && <Title className={classes.title}>Vocabulist</Title>}
           </Flex>
           <Flex gap={10}>
             <HideToggle hidden={hidden} setHidden={setHidden} />
@@ -82,14 +79,16 @@ export const AppContent = ({ entries }: Props) => {
           pb={10}
           mih={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
         >
-          {filteredEntries?.map((note) => (
+          {filteredEntries?.map((note, index) => (
             <TranslationItem
+              index={index}
               id={note.id}
               key={note.original}
               original={note.original}
               translation={note.translation}
               visible={!hidden}
               count={note.count}
+              setEntries={setEntries}
             />
           ))}
           {filteredEntries?.length === 0 && (
@@ -99,7 +98,7 @@ export const AppContent = ({ entries }: Props) => {
           )}
         </Stack>
 
-        <ChatInput language={language} />
+        <ChatInput language={language} setEntries={setEntries} />
       </Box>
     </>
   );

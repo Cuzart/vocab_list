@@ -35,3 +35,7 @@
 .stack {
   padding-top: 100px;
 }
+
+.title {
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+}

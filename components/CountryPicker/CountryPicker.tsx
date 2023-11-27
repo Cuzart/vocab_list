@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { UnstyledButton, Menu, Group } from '@mantine/core';
+import { UnstyledButton, Menu, Group, ThemeIcon } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 import images from './images';
 import classes from './CountryPicker.module.css';
 import { LanguageEnum } from '@/types';
+import Image from 'next/image';
 
 export const countryData = [
   { value: 'en', label: 'Englisch', image: images.en },
@@ -34,7 +35,7 @@ export function CountryPicker({ language, setLanguage }: Props) {
   const items = countryData.map((item) => (
     <Menu.Item
       leftSection={
-        <img src={item.image} alt={item.label} width={22} height={22} className={classes.flag} />
+        <Image src={item.image} alt={item.label} width={20} height={15} className={classes.flag} />
       }
       onClick={() => {
         setSelected(item);
@@ -58,17 +59,17 @@ export function CountryPicker({ language, setLanguage }: Props) {
       <Menu.Target>
         <UnstyledButton className={classes.control} data-expanded={opened || undefined}>
           <Group gap='xs'>
-            <img
-              src={selected?.image}
-              alt={selected?.label}
-              width={22}
-              height={22}
+            <Image
+              src={selected.image}
+              alt={selected.label}
+              width={20}
+              height={15}
               className={classes.flag}
             />
 
             <span className={classes.label}>{selected?.label}</span>
           </Group>
-          <IconChevronDown size='1rem' className={classes.icon} stroke={1.5} />
+          <IconChevronDown size='1rem' className={classes.icon} />
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>{items}</Menu.Dropdown>

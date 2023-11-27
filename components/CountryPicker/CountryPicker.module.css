@@ -18,24 +18,30 @@
 
 .control[data-expanded] {
   border-color: var(--mantine-color-violet-6);
+
+  .icon {
+    transform: rotate(180deg);
+  }
 }
 
 .label {
   font-weight: 500;
   font-size: var(--mantine-font-size-sm);
-  padding-right: 6px;
+
+  @media (max-width: 755px) {
+    display: none;
+  }
 }
 
 .icon {
   transition: transform 150ms ease;
   transform: rotate(0deg);
-}
-
-.icon[data-expanded] & {
-  transform: rotate(360deg);
+  color: var(--mantine-color-gray-outline);
+  margin-left: 6px;
 }
 
 .flag {
   border-radius: 4px;
-  border: 1px solid light-dark(var(--mantine-color-gray-2), transparent);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  /* border: 1px solid light-dark(var(--mantine-color-gray-2), transparent); */
 }
