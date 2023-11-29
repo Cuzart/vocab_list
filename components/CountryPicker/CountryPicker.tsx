@@ -54,6 +54,7 @@ export function CountryPicker({ language, setLanguage }: Props) {
       radius='md'
       width='target'
       withinPortal
+      position='bottom-end'
       transitionProps={{ transition: 'scale-y' }}
     >
       <Menu.Target>
@@ -72,7 +73,9 @@ export function CountryPicker({ language, setLanguage }: Props) {
           <IconChevronDown size='1rem' className={classes.icon} />
         </UnstyledButton>
       </Menu.Target>
-      <Menu.Dropdown>{items}</Menu.Dropdown>
+      <Menu.Dropdown miw={'fit-content'} maw={'unset'}>
+        {items}
+      </Menu.Dropdown>
     </Menu>
   );
 }
