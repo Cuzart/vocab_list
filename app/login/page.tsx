@@ -1,16 +1,7 @@
 import { cookies, headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { Alert, Box, Button, Center, PasswordInput, TextInput, Title } from '@mantine/core';
 
 export default async function Login({ searchParams }: { searchParams: { message: string } }) {
   const signIn = async (formData: FormData) => {
@@ -36,7 +27,6 @@ export default async function Login({ searchParams }: { searchParams: { message:
   const signUp = async (formData: FormData) => {
     'use server';
 
-    console.log('first');
     const origin = headers().get('origin');
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -75,6 +65,7 @@ export default async function Login({ searchParams }: { searchParams: { message:
         </Title>
         <TextInput mb={20} label='Email' name='email' required />
         <PasswordInput mb={30} label='Passwort' name='password' required />
+        <Alert mb={20} title={searchParams.message} hidden={!searchParams?.message} color='red' />
 
         <Button type='submit' fullWidth mb={20}>
           Sign In
@@ -82,7 +73,6 @@ export default async function Login({ searchParams }: { searchParams: { message:
         <Button type='submit' formAction={signUp} variant='subtle' fullWidth>
           Sign Up
         </Button>
-        {searchParams?.message && <Text>{searchParams.message}</Text>}
       </Box>
     </Center>
   );

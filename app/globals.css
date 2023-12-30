@@ -1,3 +1,11 @@
 main {
-  background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9));
+  background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9)) !important;
+}
+
+html {
+  background: var(--mantine-color-dark-9) !important;
+
+  &[data-mantine-color-scheme='light'] {
+    background: var(--mantine-color-gray-0) !important;
+  }
 }

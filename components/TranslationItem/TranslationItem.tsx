@@ -1,13 +1,4 @@
-import {
-  ActionIcon,
-  Box,
-  Collapse,
-  Flex,
-  Loader,
-  LoadingOverlay,
-  Paper,
-  Text,
-} from '@mantine/core';
+import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/core';
 import { IconArrowUp, IconTrash } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import classes from './TranslationItem.module.css';
@@ -19,7 +10,7 @@ import { TranslationEntry } from '@/types';
 
 const config = {
   delta: 10, // min distance(px) before a swipe starts. *See Notes*
-  preventScrollOnSwipe: true, // prevents scroll during swipe (*See Details*)
+  preventScrollOnSwipe: false, // prevents scroll during swipe (*See Details*)
   trackTouch: true, // track touch input
   trackMouse: true, // track mouse input
   rotationAngle: 0, // set a rotation angle
