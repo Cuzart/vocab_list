@@ -25,6 +25,7 @@ type Props = {
   visible?: boolean;
   count?: number;
   setEntries: React.Dispatch<React.SetStateAction<TranslationEntry[] | undefined>>;
+  switched: boolean;
 };
 
 export const TranslationItem = ({
@@ -34,6 +35,7 @@ export const TranslationItem = ({
   visible,
   count: initialCount,
   setEntries,
+  switched,
 }: Props) => {
   const router = useRouter();
   const [opened, setOpened] = React.useState(false);
@@ -87,6 +89,9 @@ export const TranslationItem = ({
     ...config,
   });
 
+  const displayedTranslation = switched ? original : translation;
+  const displayedOriginal = switched ? translation : original;
+
   return (
     <>
       {count < 5 && (
@@ -105,13 +110,13 @@ export const TranslationItem = ({
           >
             <Flex key={original} align={'center'} justify={'space-between'}>
               <div>
-                <Text fw={500}>{original}</Text>
+                <Text fw={500}>{displayedOriginal}</Text>
                 <Collapse in={opened}>
                   <Text c={'dimmed'}>
-                    {translation === '...' ? (
+                    {displayedTranslation === '...' ? (
                       <Loader ml={4} size={24.8} type='dots' />
                     ) : (
-                      translation
+                      displayedTranslation
                     )}
                   </Text>
                 </Collapse>

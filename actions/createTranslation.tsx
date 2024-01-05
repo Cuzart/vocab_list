@@ -8,9 +8,10 @@ type Params = {
   text: string;
   source: string;
   target: string;
+  switched?: boolean;
 };
 
-export async function createTranslation({ text, source, target }: Params) {
+export async function createTranslation({ text, source, target, switched }: Params) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const {
@@ -22,13 +23,13 @@ export async function createTranslation({ text, source, target }: Params) {
 
   const result = await translator.translateText(
     text,
-    source as SourceLanguageCode,
-    target as TargetLanguageCode
+    (switched ? target : source) as SourceLanguageCode,
+    (switched ? (source === 'en' ? 'en-GB' : source) : target) as TargetLanguageCode
   );
 
   const newTranslation = {
-    original: text,
-    translation: result.text,
+    original: switched ? result.text : text,
+    translation: switched ? text : result.text,
     created_by: user?.id,
     language: source,
   };
@@ -38,6 +39,7 @@ export async function createTranslation({ text, source, target }: Params) {
     .insert(newTranslation)
     .select('*')
     .single();
+
   if (error) {
     return false;
   }

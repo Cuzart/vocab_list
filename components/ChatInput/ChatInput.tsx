@@ -6,13 +6,16 @@ import { getHotkeyHandler } from '@mantine/hooks';
 import { createTranslation } from '../../actions/createTranslation';
 import { countryData } from '../CountryPicker/CountryPicker';
 import { TranslationEntry } from '@/types';
+import { DirectionToggle } from '../DirectionToggle/DirectionToggle';
 
 type ChatInputProps = {
   language: string;
   setEntries: React.Dispatch<React.SetStateAction<TranslationEntry[] | undefined>>;
+  switched: boolean;
+  setSwitched: (hidden: boolean) => void;
 };
 
-export const ChatInput = ({ language, setEntries }: ChatInputProps) => {
+export const ChatInput = ({ language, setEntries, switched, setSwitched }: ChatInputProps) => {
   const [message, setMessage] = useState('');
 
   const isReadyToBeSent = message.length > 0;
@@ -24,13 +27,18 @@ export const ChatInput = ({ language, setEntries }: ChatInputProps) => {
       setEntries((prevState) => [
         ...prevState!,
         {
-          original: message,
-          translation: '...',
+          original: switched ? '...' : message,
+          translation: switched ? message : '...',
           created_by: '1',
           language: language,
         } as TranslationEntry,
       ]);
-      const res = await createTranslation({ text: message, source: language, target: 'de' });
+      const res = await createTranslation({
+        text: message,
+        source: language,
+        target: 'de',
+        switched,
+      });
       if (res) {
         setEntries((prevState) => {
           const newEntries = [...prevState!];
@@ -46,10 +54,14 @@ export const ChatInput = ({ language, setEntries }: ChatInputProps) => {
     <Group className={classes.container} wrap='nowrap' gap={0}>
       <TextInput
         classNames={{ input: classes.input }}
-        placeholder={'Wort auf ' + countryData.find((c) => c.value === language)?.label}
+        placeholder={`Wort auf ${
+          switched ? 'Deutsch' : countryData.find((c) => c.value === language)?.label
+        }`}
         size='md'
         w={'100%'}
         radius={'sm'}
+        leftSection={<DirectionToggle switched={switched} setSwitched={setSwitched} />}
+        leftSectionWidth={50}
         rightSection={
           <ActionIcon
             radius={6}

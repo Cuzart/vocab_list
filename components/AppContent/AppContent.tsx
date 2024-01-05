@@ -11,6 +11,7 @@ import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
 import { IconVocabulary } from '@tabler/icons-react';
 import { LanguageEnum, TranslationEntry } from '@/types';
 import classes from './AppContent.module.css';
+import { DirectionToggle } from '../DirectionToggle/DirectionToggle';
 
 type Props = {
   entries: TranslationEntry[];
@@ -18,6 +19,7 @@ type Props = {
 
 export const AppContent = ({ entries: initialEntries }: Props) => {
   const [hidden, setHidden] = useLocalStorage({ key: 'hidden', defaultValue: true });
+  const [switched, setSwitched] = useLocalStorage({ key: 'switched', defaultValue: false });
   const [language, setLanguage] = useLocalStorage<LanguageEnum>({
     key: 'language',
     defaultValue: 'en',
@@ -91,6 +93,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
               visible={!hidden}
               count={note.count}
               setEntries={setEntries}
+              switched={switched}
             />
           ))}
           {filteredEntries?.length === 0 && (
@@ -100,7 +103,12 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
           )}
         </Stack>
 
-        <ChatInput language={language} setEntries={setEntries} />
+        <ChatInput
+          language={language}
+          setEntries={setEntries}
+          switched={switched}
+          setSwitched={setSwitched}
+        />
       </Box>
     </>
   );
