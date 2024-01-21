@@ -2,7 +2,7 @@ import React from 'react';
 // UPDATE this path to your copy of the hook!
 // Source here: https://joshwcomeau.com/snippets/react-hooks/use-prefers-reduced-motion
 // import usePrefersReducedMotion from '@hooks/use-prefers-reduced-motion.hook';
-import { useSpring } from 'react-spring';
+import { useReducedMotion, useSpring } from 'react-spring';
 
 function useBoop({
   x = 0,
@@ -15,7 +15,7 @@ function useBoop({
     friction: 10,
   },
 }) {
-  // const prefersReducedMotion = usePrefersReducedMotion();
+  const reduceMotion = useReducedMotion();
   const [isBooped, setIsBooped] = React.useState(false);
   const style = useSpring({
     transform: isBooped
@@ -41,8 +41,7 @@ function useBoop({
   const trigger = React.useCallback(() => {
     setIsBooped(true);
   }, []);
-  // let appliedStyle = prefersReducedMotion ? {} : style;
-  let appliedStyle = style;
+  let appliedStyle = reduceMotion ? {} : style;
   return [appliedStyle as any, trigger as () => void];
 }
 export default useBoop;
