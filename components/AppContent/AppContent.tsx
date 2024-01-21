@@ -137,9 +137,9 @@ export const AppHeader = ({
         </Flex>
       </Link>
       <Flex gap={10}>
-        {setHidden && <HideToggle hidden={hidden} setHidden={setHidden} />}
+        {setHidden && <HideToggle hidden={hidden!} setHidden={setHidden} />}
         {!isIndex && <ThemeToggle />}
-        {setLanguage && <CountryPicker language={language} setLanguage={setLanguage} />}
+        {setLanguage && <CountryPicker language={language!} setLanguage={setLanguage} />}
         {isIndex && (
           <ActionIcon
             component={Link}
