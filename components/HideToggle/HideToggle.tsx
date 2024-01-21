@@ -3,6 +3,8 @@ import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import React from 'react';
 import classes from './HideToggle.module.css';
 import { rotate, rotateReverted } from '@/utils/animations';
+import useBoop from '@/hooks/useBoop';
+import { animated } from 'react-spring';
 
 type Props = {
   hidden: boolean;
@@ -10,6 +12,8 @@ type Props = {
 };
 
 export const HideToggle = ({ hidden, setHidden }: Props) => {
+  const [boopStyle, trigger] = useBoop({ rotation: 10, timing: 300 });
+
   return (
     <ActionIcon
       className={classes.button}
@@ -17,12 +21,21 @@ export const HideToggle = ({ hidden, setHidden }: Props) => {
       color='gray'
       onClick={() => setHidden(!hidden)}
       variant='outline'
+      onMouseEnter={trigger}
     >
       <Transition mounted={hidden} transition={rotate}>
-        {(style) => <IconEye style={style} />}
+        {(style) => (
+          <animated.div style={boopStyle}>
+            <IconEye style={style} />
+          </animated.div>
+        )}
       </Transition>
       <Transition mounted={!hidden} transition={rotateReverted}>
-        {(style) => <IconEyeOff style={style} />}
+        {(style) => (
+          <animated.div style={boopStyle}>
+            <IconEyeOff style={style} />
+          </animated.div>
+        )}
       </Transition>
     </ActionIcon>
   );

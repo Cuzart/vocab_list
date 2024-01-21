@@ -1,7 +1,18 @@
 import { cookies, headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { Alert, Box, Button, Center, PasswordInput, TextInput, Title } from '@mantine/core';
+import {
+  Alert,
+  Anchor,
+  Box,
+  Button,
+  Center,
+  PasswordInput,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
+import Link from 'next/link';
 
 export default async function Login({ searchParams }: { searchParams: { message: string } }) {
   const signIn = async (formData: FormData) => {
@@ -67,6 +78,16 @@ export default async function Login({ searchParams }: { searchParams: { message:
         <PasswordInput mb={30} label='Passwort' name='password' required />
         <Alert mb={20} title={searchParams.message} hidden={!searchParams?.message} color='red' />
 
+        <Anchor
+          display={'block'}
+          ta={'center'}
+          component={Link}
+          href='/password-reset'
+          mb={20}
+          variant='subtle'
+        >
+          Passwort vergessen?
+        </Anchor>
         <Button type='submit' fullWidth mb={20}>
           Sign In
         </Button>
