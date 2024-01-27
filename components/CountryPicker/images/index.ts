@@ -5,6 +5,7 @@ import ru from './ru.svg';
 import pl from './pl.svg';
 import it from './it.svg';
 import es from './es.svg';
+import tr from './tr.svg';
 
 export default {
   en: en.src,
@@ -14,4 +15,5 @@ export default {
   pl: pl.src,
   it: it.src,
   es: es.src,
+  tr: tr.src,
 };
