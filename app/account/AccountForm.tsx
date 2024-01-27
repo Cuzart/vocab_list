@@ -92,20 +92,15 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
       <Box className={classes.container}>
         <AppHeader />
 
-        <Flex
-          mt={20}
-          justify={'space-between'}
-          align={'flex-end'}
-          style={{ flexWrap: 'wrap' }}
-          gap={30}
-        >
-          <Box>
+        <Flex justify={'space-between'} align={'flex-end'} style={{ flexWrap: 'wrap' }} gap={30}>
+          <Box style={{ flexGrow: 1, alignSelf: 'flex-start' }}>
             <Text fz={20} fw={700} mb={20}>
               Profil-Einstellungen
             </Text>
 
             <TextInput
               maw={400}
+              w={'100%'}
               label='Email Adresse'
               readOnly
               required
@@ -115,10 +110,10 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
             {changePassword === 'email' && (
               <TextInput
                 maw={400}
+                w={'100%'}
                 label='Neue Email Adresse'
-                readOnly
                 required
-                {...form.getInputProps('email')}
+                {...form.getInputProps('newEmail')}
               />
             )}
 
@@ -132,6 +127,7 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
 
                 <PasswordInput
                   maw={400}
+                  w={'100%'}
                   label='Neues Passwort'
                   required
                   mb={16}
@@ -139,6 +135,7 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
                 />
                 <PasswordInput
                   maw={400}
+                  w={'100%'}
                   label='Passwort wiederholen'
                   required
                   {...form.getInputProps('confirmPassword')}
