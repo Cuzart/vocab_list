@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/core';
-import { IconArrowUp, IconTrash } from '@tabler/icons-react';
+import { IconArrowUp, IconTrash, IconVolume } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import classes from './TranslationItem.module.css';
 import { useSwipeable } from 'react-swipeable';
@@ -26,6 +26,7 @@ type Props = {
   count?: number;
   setEntries: React.Dispatch<React.SetStateAction<TranslationEntry[] | undefined>>;
   switched: boolean;
+  language: string;
 };
 
 export const TranslationItem = ({
@@ -36,6 +37,7 @@ export const TranslationItem = ({
   count: initialCount,
   setEntries,
   switched,
+  language,
 }: Props) => {
   const router = useRouter();
   const [opened, setOpened] = React.useState(false);
@@ -62,6 +64,12 @@ export const TranslationItem = ({
     !res && setEntries(() => previous);
   };
 
+  const read = async (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = switched ? 'de-DE' : language;
+    speechSynthesis.speak(utterance);
+  };
+
   const handlers = useSwipeable({
     onSwiping: (eventData) => {
       if (eventData.dir === 'Left') {
@@ -71,9 +79,19 @@ export const TranslationItem = ({
           setOffsetContainer(eventData.deltaX + 60);
         }
       }
+      if (eventData.dir === 'Right') {
+        if (eventData.deltaX < 60) {
+          setOffset(eventData.deltaX);
+        } else {
+          setOffsetContainer(eventData.deltaX - 60);
+        }
+      }
     },
 
     onSwiped: async (eventData) => {
+      if (eventData.deltaX > 100) {
+        read(displayedOriginal);
+      }
       if (eventData.deltaX < -100) {
         handleOptimisticDelete();
       }
@@ -97,6 +115,7 @@ export const TranslationItem = ({
       {count < 5 && (
         <Box
           className={classes.container}
+          data-left={offset > 0 && true}
           mod={{ opened }}
           style={{ transform: `translateX(${offsetContainer}px)` }}
           {...handlers}
@@ -142,10 +161,11 @@ export const TranslationItem = ({
             </Flex>
           </Paper>
           <Box
+            data-left={offset > 0 && true}
             className={classes.underlay}
             opacity={Math.abs(offset / 100) + Math.abs(offsetContainer / 100)}
           >
-            <IconTrash />
+            {offset > 0 ? <IconVolume /> : <IconTrash />}
           </Box>
         </Box>
       )}

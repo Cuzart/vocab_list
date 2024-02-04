@@ -59,6 +59,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
               count={note.count}
               setEntries={setEntries}
               switched={switched}
+              language={language}
             />
           ))}
           {filteredEntries?.length === 0 && (
