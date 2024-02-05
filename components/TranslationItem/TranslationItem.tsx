@@ -65,9 +65,12 @@ export const TranslationItem = ({
   };
 
   const read = async (text: string) => {
+    const x = window.speechSynthesis.getVoices();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = switched ? 'de-DE' : language;
-    speechSynthesis.speak(utterance);
+    utterance.voice = x.find((voice) => voice.lang.includes(language))!;
+
+    window.speechSynthesis.speak(utterance);
   };
 
   const handlers = useSwipeable({
@@ -125,7 +128,7 @@ export const TranslationItem = ({
             p={10}
             px={20}
             style={{ transform: `translateX(${offset}px)` }}
-            onClick={() => setOpened(!opened)}
+            onClick={() => read(displayedOriginal)}
           >
             <Flex key={original} align={'center'} justify={'space-between'}>
               <div>

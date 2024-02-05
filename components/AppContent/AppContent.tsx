@@ -35,7 +35,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
 
   return (
     <>
-      <Box pos={'relative'} px={20}>
+      <Box pos={'relative'} px={20} style={{ overflowX: 'hidden' }}>
         <AppHeader
           hidden={hidden}
           setHidden={setHidden}
