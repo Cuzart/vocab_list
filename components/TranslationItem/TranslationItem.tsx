@@ -1,4 +1,17 @@
-import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Collapse,
+  Flex,
+  Loader,
+  Menu,
+  MenuDropdown,
+  MenuItem,
+  MenuTarget,
+  Paper,
+  Text,
+  ThemeIcon,
+} from '@mantine/core';
 import { IconArrowUp, IconTrash, IconVolume } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import classes from './TranslationItem.module.css';
@@ -7,6 +20,7 @@ import { deleteTranslation } from '@/actions/deleteTranslation';
 import { useRouter } from 'next/navigation';
 import { increaseTranslationCount } from '@/actions/increaseTranslationCount';
 import { TranslationEntry } from '@/types';
+import { useClickOutside } from '@mantine/hooks';
 
 const config = {
   delta: 10, // min distance(px) before a swipe starts. *See Notes*
@@ -65,113 +79,148 @@ export const TranslationItem = ({
   };
 
   const read = async (text: string) => {
-    const x = window.speechSynthesis.getVoices();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = switched ? 'de-DE' : language;
-    utterance.voice = x.find((voice) => voice.lang.includes(language))!;
-
     window.speechSynthesis.speak(utterance);
   };
 
-  const handlers = useSwipeable({
-    onSwiping: (eventData) => {
-      if (eventData.dir === 'Left') {
-        if (eventData.deltaX > -60) {
-          setOffset(eventData.deltaX);
-        } else {
-          setOffsetContainer(eventData.deltaX + 60);
-        }
-      }
-      if (eventData.dir === 'Right') {
-        if (eventData.deltaX < 60) {
-          setOffset(eventData.deltaX);
-        } else {
-          setOffsetContainer(eventData.deltaX - 60);
-        }
-      }
-    },
+  // const handlers = useSwipeable({
+  //   onSwiping: (eventData) => {
+  //     if (eventData.dir === 'Left') {
+  //       if (eventData.deltaX > -60) {
+  //         setOffset(eventData.deltaX);
+  //       } else {
+  //         setOffsetContainer(eventData.deltaX + 60);
+  //       }
+  //     }
+  //     if (eventData.dir === 'Right') {
+  //       if (eventData.deltaX < 60) {
+  //         setOffset(eventData.deltaX);
+  //       } else {
+  //         setOffsetContainer(eventData.deltaX - 60);
+  //       }
+  //     }
+  //   },
 
-    onSwiped: async (eventData) => {
-      if (eventData.deltaX > 100) {
-        read(displayedOriginal);
-      }
-      if (eventData.deltaX < -100) {
-        handleOptimisticDelete();
-      }
-      setOffset(0);
-      setOffsetContainer(0);
-    },
+  //   onSwiped: async (eventData) => {
+  //     if (eventData.deltaX > 100) {
+  //       read(displayedOriginal);
+  //     }
+  //     if (eventData.deltaX < -100) {
+  //       handleOptimisticDelete();
+  //     }
+  //     setOffset(0);
+  //     setOffsetContainer(0);
+  //   },
 
-    // onTap: (e) => {
-    //   console.log(e);
-    //   setOpened(!opened);
-    // },
+  //   // onTap: (e) => {
+  //   //   console.log(e);
+  //   //   setOpened(!opened);
+  //   // },
 
-    ...config,
-  });
+  //   ...config,
+  // });
 
   const displayedTranslation = switched ? original : translation;
   const displayedOriginal = switched ? translation : original;
 
-  return (
-    <>
-      {count < 5 && (
-        <Box
-          className={classes.container}
-          data-left={offset > 0 && true}
-          mod={{ opened }}
-          style={{ transform: `translateX(${offsetContainer}px)` }}
-          {...handlers}
-        >
-          <Paper
-            className={classes.paper}
-            p={10}
-            px={20}
-            style={{ transform: `translateX(${offset}px)` }}
-            onClick={() => read(displayedOriginal)}
-          >
-            <Flex key={original} align={'center'} justify={'space-between'}>
-              <div>
-                <Text fw={500}>{displayedOriginal}</Text>
-                <Collapse in={opened}>
-                  <Text c={'dimmed'}>
-                    {displayedTranslation === '...' ? (
-                      <Loader ml={4} size={24.8} type='dots' />
-                    ) : (
-                      displayedTranslation
-                    )}
-                  </Text>
-                </Collapse>
-              </div>
+  const timeOutRef = React.useRef<any>(null);
+  const [menuOpened, setMenuOpened] = React.useState(false);
+  const ref = useClickOutside(() => setMenuOpened(false));
 
-              <ActionIcon
-                size={'lg'}
-                w={'auto'}
-                variant='outline'
-                px={6}
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  const oldCount = count;
-                  setCount(oldCount + 1);
-                  const res = await increaseTranslationCount({ id: id, count: oldCount + 1 });
-                  !res && setCount(oldCount);
-                }}
-              >
-                <IconArrowUp size={16} />
-                {count > 0 && <Text>{count}</Text>}
-              </ActionIcon>
-            </Flex>
-          </Paper>
+  return (
+    <Menu position='bottom-end' opened={menuOpened} onChange={() => {}}>
+      {count < 5 && (
+        <MenuTarget ref={ref}>
           <Box
+            className={classes.container}
             data-left={offset > 0 && true}
-            className={classes.underlay}
-            opacity={Math.abs(offset / 100) + Math.abs(offsetContainer / 100)}
+            mod={{ opened }}
+            style={{ transform: `translateX(${offsetContainer}px)` }}
+            // {...handlers}
           >
-            {offset > 0 ? <IconVolume /> : <IconTrash />}
+            <Paper
+              className={classes.paper}
+              p={10}
+              px={20}
+              style={{ transform: `translateX(${offset}px)` }}
+              onClick={() => setOpened(!opened)}
+              onMouseDown={() => {
+                if (menuOpened) {
+                  setMenuOpened(false);
+                } else {
+                  timeOutRef.current = setTimeout(() => setMenuOpened(true), 600);
+                }
+              }}
+              onMouseUp={() => {
+                clearTimeout(timeOutRef.current);
+              }}
+            >
+              <Flex key={original} align={'center'} justify={'space-between'}>
+                <div>
+                  <Text fw={500}>{displayedOriginal}</Text>
+                  <Collapse in={opened}>
+                    <Text c={'dimmed'}>
+                      {displayedTranslation === '...' ? (
+                        <Loader ml={4} size={24.8} type='dots' />
+                      ) : (
+                        displayedTranslation
+                      )}
+                    </Text>
+                  </Collapse>
+                </div>
+
+                <ActionIcon
+                  size={'lg'}
+                  w={'auto'}
+                  variant='outline'
+                  px={6}
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    const oldCount = count;
+                    setCount(oldCount + 1);
+                    const res = await increaseTranslationCount({ id: id, count: oldCount + 1 });
+                    !res && setCount(oldCount);
+                  }}
+                >
+                  <IconArrowUp size={16} />
+                  {count > 0 && <Text>{count}</Text>}
+                </ActionIcon>
+              </Flex>
+            </Paper>
+            <Box
+              data-left={offset > 0 && true}
+              className={classes.underlay}
+              opacity={Math.abs(offset / 100) + Math.abs(offsetContainer / 100)}
+            >
+              {offset > 0 ? <IconVolume /> : <IconTrash />}
+            </Box>
           </Box>
-        </Box>
+        </MenuTarget>
       )}
-    </>
+      <MenuDropdown>
+        <MenuItem
+          onClick={() => read(displayedOriginal)}
+          leftSection={
+            <ThemeIcon size={'sm'} variant='transparent' c={'brand'}>
+              <IconVolume />
+            </ThemeIcon>
+          }
+        >
+          Vorlesen
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleOptimisticDelete()}
+          leftSection={
+            <ThemeIcon size={'sm'} variant='transparent' c={'red'}>
+              <IconTrash />
+            </ThemeIcon>
+          }
+        >
+          Löschen
+        </MenuItem>
+      </MenuDropdown>
+    </Menu>
   );
 };
