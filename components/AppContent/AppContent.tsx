@@ -27,7 +27,8 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
     key: 'language',
     defaultValue: 'en',
   });
-  const [allowSound, setAllowSound] = useLocalStorage({ key: 'allowSound', defaultValue: false });
+  // needs to be reset because iOS needs a button event to trigger the first speech synthesis utterance
+  const [allowSound, setAllowSound] = useState(false);
 
   const [entries, setEntries] = useState<TranslationEntry[] | undefined>(initialEntries);
   const filteredEntries = useMemo(

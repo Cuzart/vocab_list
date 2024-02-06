@@ -95,7 +95,7 @@ export const TranslationItem = ({
           setOffsetContainer(eventData.deltaX + 60);
         }
       }
-      if (eventData.dir === 'Right') {
+      if (allowSound && eventData.dir === 'Right') {
         if (eventData.deltaX < 60) {
           setOffset(eventData.deltaX);
         } else {
@@ -105,11 +105,11 @@ export const TranslationItem = ({
     },
 
     onSwiped: async (eventData) => {
-      if (eventData.deltaX > 100) {
-        read(displayedOriginal);
-      }
       if (eventData.deltaX < -100) {
         handleOptimisticDelete();
+      }
+      if (allowSound && eventData.deltaX > 100) {
+        read(displayedOriginal);
       }
       setOffset(0);
       setOffsetContainer(0);
@@ -156,7 +156,7 @@ export const TranslationItem = ({
               <div>
                 <Flex align={'center'}>
                   <Text fw={500}>{displayedOriginal}</Text>
-                  {allowSound && (
+                  {/* {allowSound && (
                     <ActionIcon
                       size={'lg'}
                       w={'auto'}
@@ -169,7 +169,7 @@ export const TranslationItem = ({
                     >
                       <IconVolume />
                     </ActionIcon>
-                  )}
+                  )} */}
                 </Flex>
                 <Collapse in={opened}>
                   <Text c={'dimmed'}>
