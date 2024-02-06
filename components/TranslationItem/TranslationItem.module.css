@@ -7,11 +7,6 @@
   z-index: 2;
   border: 1px solid;
   border-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-6));
-
-  &:active {
-    transform: scale(0.99) !important;
-    opacity: 0.7;
-  }
 }
 
 .paper:hover {

@@ -14,6 +14,7 @@ import classes from './AppContent.module.css';
 import Link from 'next/link';
 import useBoop from '@/hooks/useBoop';
 import { animated } from 'react-spring';
+import { SoundToggle } from '../SoundToggle/SoundToggle';
 
 type Props = {
   entries: TranslationEntry[];
@@ -26,6 +27,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
     key: 'language',
     defaultValue: 'en',
   });
+  const [allowSound, setAllowSound] = useLocalStorage({ key: 'allowSound', defaultValue: false });
 
   const [entries, setEntries] = useState<TranslationEntry[] | undefined>(initialEntries);
   const filteredEntries = useMemo(
@@ -41,6 +43,8 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
           setHidden={setHidden}
           language={language}
           setLanguage={setLanguage}
+          allowSound={allowSound}
+          setAllowSound={setAllowSound}
           isIndex
         />
         <Stack
@@ -60,6 +64,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
               setEntries={setEntries}
               switched={switched}
               language={language}
+              allowSound={allowSound}
             />
           ))}
           {filteredEntries?.length === 0 && (
@@ -86,6 +91,8 @@ type AppHeaderProps = {
   language: LanguageEnum;
   setLanguage: (value: LanguageEnum) => void;
   isIndex?: boolean;
+  allowSound: boolean;
+  setAllowSound: (value: boolean) => void;
 };
 
 export const AppHeader = ({
@@ -94,6 +101,8 @@ export const AppHeader = ({
   language,
   setLanguage,
   isIndex = false,
+  allowSound,
+  setAllowSound,
 }: Partial<AppHeaderProps>) => {
   const matches = useMediaQuery('(min-width: 640px)');
 
@@ -138,6 +147,7 @@ export const AppHeader = ({
         </Flex>
       </Link>
       <Flex gap={10}>
+        {setAllowSound && <SoundToggle allowSound={allowSound!} setAllowSound={setAllowSound!} />}
         {setHidden && <HideToggle hidden={hidden!} setHidden={setHidden} />}
         {!isIndex && <ThemeToggle />}
         {setLanguage && <CountryPicker language={language!} setLanguage={setLanguage} />}
