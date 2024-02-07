@@ -36,9 +36,16 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
     [entries, language]
   );
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollDown = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({ top: 9999, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
-      <Box pos={'relative'} px={20} style={{ overflowX: 'hidden' }}>
+      <Box pos={'relative'} style={{ overflowX: 'hidden' }}>
         <AppHeader
           hidden={hidden}
           setHidden={setHidden}
@@ -49,10 +56,10 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
           isIndex
         />
         <Stack
+          ref={containerRef}
           className={classes.stack}
-          mt={0}
-          pb={10}
-          mih={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
+          h={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
+          mah={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
         >
           {filteredEntries?.map((note) => (
             <TranslationItem
@@ -74,12 +81,12 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
             </Center>
           )}
         </Stack>
-
         <ChatInput
           language={language}
           setEntries={setEntries}
           switched={switched}
           setSwitched={setSwitched}
+          afterSubmit={scrollDown}
         />
       </Box>
     </>

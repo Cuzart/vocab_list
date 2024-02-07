@@ -13,9 +13,16 @@ type ChatInputProps = {
   setEntries: React.Dispatch<React.SetStateAction<TranslationEntry[] | undefined>>;
   switched: boolean;
   setSwitched: (hidden: boolean) => void;
+  afterSubmit?: () => void;
 };
 
-export const ChatInput = ({ language, setEntries, switched, setSwitched }: ChatInputProps) => {
+export const ChatInput = ({
+  language,
+  setEntries,
+  switched,
+  setSwitched,
+  afterSubmit,
+}: ChatInputProps) => {
   const [message, setMessage] = useState('');
 
   const isReadyToBeSent = message.length > 0;
@@ -33,12 +40,18 @@ export const ChatInput = ({ language, setEntries, switched, setSwitched }: ChatI
           language: language,
         } as TranslationEntry,
       ]);
+
+      setTimeout(() => {
+        afterSubmit && afterSubmit();
+      }, 300);
+
       const res = await createTranslation({
         text: message,
         source: language,
         target: 'de',
         switched,
       });
+
       if (res) {
         setEntries((prevState) => {
           const newEntries = [...prevState!];

@@ -33,7 +33,9 @@
 }
 
 .stack {
-  padding-top: 100px;
+  padding: 100px 20px;
+  padding-bottom: 20px;
+  overflow: scroll;
 }
 
 .title {
