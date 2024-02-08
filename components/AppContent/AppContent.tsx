@@ -64,7 +64,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
           {filteredEntries?.map((note) => (
             <TranslationItem
               id={note.id}
-              key={note.original}
+              key={note.id}
               original={note.original}
               translation={note.translation}
               visible={!hidden}
@@ -76,7 +76,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
             />
           ))}
           {filteredEntries?.length === 0 && (
-            <Center h={'75vh'} ta='center'>
+            <Center h={'75dvh'} ta='center'>
               Keine Einträge
             </Center>
           )}

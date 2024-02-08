@@ -11,6 +11,8 @@ import {
   PasswordInput,
   TextInput,
   ButtonProps,
+  Slider,
+  MultiSelect,
 } from '@mantine/core';
 import React, { Fragment, useState } from 'react';
 import classes from './AccountForm.module.css';
@@ -30,6 +32,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { deleteUser } from '@/actions/deleteUser';
 import useBoop from '@/hooks/useBoop';
 import { animated } from 'react-spring';
+import { countryData } from '@/components/CountryPicker/CountryPicker';
 
 type Props = {
   user: User;
@@ -194,6 +197,29 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
             />
           </Flex>
         </Flex>
+
+        {/* <Box pb={60}>
+          <Text mt={30} fz={20} fw={700} mb={20}>
+            App-Einstellungen
+          </Text>
+          <MultiSelect mb={20} label='Sprachen' data={countryData} hidePickedOptions></MultiSelect>
+
+          <Text size='sm' mb={7} fw={500}>
+            Wiederholungen bis zur Löschung (bald verfügbar)
+          </Text>
+          <Slider
+            min={1}
+            max={10}
+            step={1}
+            defaultValue={5}
+            marks={[
+              { value: 1, label: '1' },
+              { value: 5, label: '5' },
+              { value: 10, label: '10' },
+            ]}
+            mb={30}
+          />
+        </Box> */}
       </Box>
 
       <Modal opened={opened} onClose={close} title='Account wirklich löschen?'>

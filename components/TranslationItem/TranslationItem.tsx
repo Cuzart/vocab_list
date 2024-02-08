@@ -1,26 +1,11 @@
-import {
-  ActionIcon,
-  Box,
-  Collapse,
-  Flex,
-  Loader,
-  Menu,
-  MenuDropdown,
-  MenuItem,
-  MenuTarget,
-  Paper,
-  Text,
-  ThemeIcon,
-} from '@mantine/core';
+import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/core';
 import { IconArrowUp, IconTrash, IconVolume } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import classes from './TranslationItem.module.css';
 import { useSwipeable } from 'react-swipeable';
 import { deleteTranslation } from '@/actions/deleteTranslation';
-import { useRouter } from 'next/navigation';
 import { increaseTranslationCount } from '@/actions/increaseTranslationCount';
 import { TranslationEntry } from '@/types';
-import { useClickOutside } from '@mantine/hooks';
 
 const config = {
   delta: 10, // min distance(px) before a swipe starts. *See Notes*
@@ -33,7 +18,7 @@ const config = {
 };
 
 type Props = {
-  id: number;
+  id: string | number;
   original: string;
   translation: string;
   visible?: boolean;
@@ -55,7 +40,6 @@ export const TranslationItem = ({
   language,
   allowSound,
 }: Props) => {
-  const router = useRouter();
   const [opened, setOpened] = React.useState(false);
   const [count, setCount] = React.useState(initialCount || 0);
   const [offset, setOffset] = React.useState(0);
@@ -75,7 +59,7 @@ export const TranslationItem = ({
       newEntries.splice(index, 1);
       return newEntries;
     });
-    const res = await deleteTranslation({ id: id });
+    const res = await deleteTranslation({ id: id as number });
 
     !res && setEntries(() => previous);
   };
@@ -152,7 +136,7 @@ export const TranslationItem = ({
             //   clearTimeout(timeOutRef.current);
             // }}
           >
-            <Flex key={original} align={'center'} justify={'space-between'}>
+            <Flex key={id} align={'center'} justify={'space-between'}>
               <div>
                 <Flex align={'center'}>
                   <Text fw={500}>{displayedOriginal}</Text>

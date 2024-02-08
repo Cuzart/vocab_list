@@ -7,6 +7,7 @@ import { createTranslation } from '../../actions/createTranslation';
 import { countryData } from '../CountryPicker/CountryPicker';
 import { TranslationEntry } from '@/types';
 import { DirectionToggle } from '../DirectionToggle/DirectionToggle';
+import { v4 as uuidv4 } from 'uuid';
 
 type ChatInputProps = {
   language: string;
@@ -30,10 +31,12 @@ export const ChatInput = ({
   const handleSubmit = async () => {
     if (isReadyToBeSent) {
       setMessage('');
+      const id: string = uuidv4();
 
       setEntries((prevState) => [
         ...prevState!,
         {
+          id,
           original: switched ? '...' : message,
           translation: switched ? message : '...',
           created_by: '1',
@@ -55,8 +58,14 @@ export const ChatInput = ({
       if (res) {
         setEntries((prevState) => {
           const newEntries = [...prevState!];
-          newEntries.pop();
-          newEntries.push(res as TranslationEntry);
+          newEntries[newEntries.length - 1] = {
+            ...newEntries[newEntries.length - 1],
+            ...res,
+            id,
+          };
+          // newEntries.pop();
+          // newEntries.push(res as TranslationEntry);
+          console.log(newEntries[newEntries.length - 1]);
           return newEntries;
         });
       }
