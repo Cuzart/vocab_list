@@ -176,7 +176,10 @@ export const TranslationItem = ({
                   e.preventDefault();
                   const oldCount = count;
                   setCount(oldCount + 1);
-                  const res = await increaseTranslationCount({ id: id, count: oldCount + 1 });
+                  const res = await increaseTranslationCount({
+                    id: id as number,
+                    count: oldCount + 1,
+                  });
                   !res && setCount(oldCount);
                 }}
               >
