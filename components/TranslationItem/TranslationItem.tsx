@@ -27,6 +27,7 @@ type Props = {
   switched: boolean;
   language: string;
   allowSound?: boolean;
+  repetitionLimit?: number;
 };
 
 export const TranslationItem = ({
@@ -39,6 +40,7 @@ export const TranslationItem = ({
   switched,
   language,
   allowSound,
+  repetitionLimit = 5,
 }: Props) => {
   const [opened, setOpened] = React.useState(false);
   const [count, setCount] = React.useState(initialCount || 0);
@@ -111,7 +113,7 @@ export const TranslationItem = ({
 
   return (
     <>
-      {count < 5 && (
+      {count < repetitionLimit && (
         <Box
           className={classes.container}
           data-left={offset > 0 && true}
@@ -179,6 +181,7 @@ export const TranslationItem = ({
                   const res = await increaseTranslationCount({
                     id: id as number,
                     count: oldCount + 1,
+                    limit: repetitionLimit,
                   });
                   !res && setCount(oldCount);
                 }}
@@ -191,7 +194,7 @@ export const TranslationItem = ({
           <Box
             data-left={offset > 0 && true}
             className={classes.underlay}
-            // opacity={Math.abs(offset / 100) + Math.abs(offsetContainer / 100)}
+            opacity={Math.abs(offset / 100) + Math.abs(offsetContainer / 100)}
           >
             {offset > 0 ? <IconVolume /> : <IconTrash />}
           </Box>

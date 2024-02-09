@@ -5,6 +5,7 @@ import './globals.css';
 import { ColorSchemeScript, Container, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { Viewport } from 'next';
+import { cookies } from 'next/headers';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -30,6 +31,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  cookies();
   return (
     <html lang='de' className={GeistSans.className}>
       <head>

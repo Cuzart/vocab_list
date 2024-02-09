@@ -41,6 +41,7 @@ export const ChatInput = ({
           translation: switched ? message : '...',
           created_by: '1',
           language: language,
+          keyId: id,
         } as TranslationEntry,
       ]);
 
@@ -61,7 +62,6 @@ export const ChatInput = ({
           newEntries[newEntries.length - 1] = {
             ...newEntries[newEntries.length - 1],
             ...res,
-            id,
           };
           // newEntries.pop();
           // newEntries.push(res as TranslationEntry);

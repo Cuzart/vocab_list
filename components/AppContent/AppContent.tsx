@@ -1,6 +1,6 @@
 'use client';
 
-import { ActionIcon, Box, Center, Flex, Group, Stack, ThemeIcon, Title } from '@mantine/core';
+import { ActionIcon, Text, Box, Center, Flex, Group, Stack, ThemeIcon, Title } from '@mantine/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { HideToggle } from '../HideToggle/HideToggle';
 import { CountryPicker } from '../CountryPicker/CountryPicker';
@@ -15,12 +15,15 @@ import Link from 'next/link';
 import useBoop from '@/hooks/useBoop';
 import { animated } from 'react-spring';
 import { SoundToggle } from '../SoundToggle/SoundToggle';
+import Image from 'next/image';
+import EmptyState from '@/public/empty.svg';
 
 type Props = {
   entries: TranslationEntry[];
+  profileData: { languages: LanguageEnum[]; repetitions: number } | null;
 };
 
-export const AppContent = ({ entries: initialEntries }: Props) => {
+export const AppContent = ({ entries: initialEntries, profileData }: Props) => {
   const [hidden, setHidden] = useLocalStorage({ key: 'hidden', defaultValue: true });
   const [switched, setSwitched] = useLocalStorage({ key: 'switched', defaultValue: false });
   const [language, setLanguage] = useLocalStorage<LanguageEnum>({
@@ -54,6 +57,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
           allowSound={allowSound}
           setAllowSound={setAllowSound}
           isIndex
+          languages={profileData?.languages}
         />
         <Stack
           ref={containerRef}
@@ -64,7 +68,7 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
           {filteredEntries?.map((note) => (
             <TranslationItem
               id={note.id}
-              key={note.id}
+              key={note.keyId || note.id}
               original={note.original}
               translation={note.translation}
               visible={!hidden}
@@ -73,11 +77,15 @@ export const AppContent = ({ entries: initialEntries }: Props) => {
               switched={switched}
               language={language}
               allowSound={allowSound}
+              repetitionLimit={profileData?.repetitions}
             />
           ))}
           {filteredEntries?.length === 0 && (
-            <Center h={'75dvh'} ta='center'>
-              Keine Einträge
+            <Center h={'100%'} ta={'center'}>
+              <div>
+                <Image width={300} height={250} src={EmptyState} alt={''} priority />
+                <Text>Noch keine Einträge</Text>
+              </div>
             </Center>
           )}
         </Stack>
@@ -101,6 +109,7 @@ type AppHeaderProps = {
   isIndex?: boolean;
   allowSound: boolean;
   setAllowSound: (value: boolean) => void;
+  languages?: LanguageEnum[];
 };
 
 export const AppHeader = ({
@@ -111,6 +120,7 @@ export const AppHeader = ({
   isIndex = false,
   allowSound,
   setAllowSound,
+  languages,
 }: Partial<AppHeaderProps>) => {
   const matches = useMediaQuery('(min-width: 640px)');
 
@@ -158,7 +168,9 @@ export const AppHeader = ({
         {setAllowSound && <SoundToggle allowSound={allowSound!} setAllowSound={setAllowSound!} />}
         {setHidden && <HideToggle hidden={hidden!} setHidden={setHidden} />}
         {!isIndex && <ThemeToggle />}
-        {setLanguage && <CountryPicker language={language!} setLanguage={setLanguage} />}
+        {setLanguage && (
+          <CountryPicker language={language!} setLanguage={setLanguage} languages={languages} />
+        )}
         {isIndex && (
           <ActionIcon
             component={Link}

@@ -7,33 +7,44 @@ import { LanguageEnum } from '@/types';
 import Image from 'next/image';
 
 export const countryData = [
+  { value: 'zh', label: 'Chinesisch', image: images.cn },
+  { value: 'da', label: 'Dänisch', image: images.dk },
   { value: 'en', label: 'Englisch', image: images.en },
   { value: 'fr', label: 'Französisch', image: images.fr },
-  { value: 'es', label: 'Spanisch', image: images.es },
+  { value: 'el', label: 'Griechisch', image: images.gr },
   { value: 'it', label: 'Italienisch', image: images.it },
+  { value: 'ja', label: 'Japanisch', image: images.jp },
+  { value: 'nl', label: 'Niederländisch', image: images.nl },
+  { value: 'nb', label: 'Norwegisch', image: images.no },
   { value: 'pl', label: 'Polnisch', image: images.pl },
+  { value: 'pt', label: 'Portugiesisch', image: images.pt },
+  { value: 'ro', label: 'Rumnänisch', image: images.ro },
   { value: 'ru', label: 'Russisch', image: images.ru },
+  { value: 'sv', label: 'Schwedisch', image: images.se },
+  { value: 'es', label: 'Spanisch', image: images.es },
   { value: 'tr', label: 'Türkisch', image: images.tr },
-  // { value: 'de', label: 'German', image: images.de },
-].sort((a, b) => a.label.localeCompare(b.label));
+];
 
 type Props = {
   language: LanguageEnum;
   setLanguage: (language: LanguageEnum) => void;
+  languages?: LanguageEnum[];
 };
 
-export function CountryPicker({ language, setLanguage }: Props) {
+export function CountryPicker({ language, setLanguage, languages }: Props) {
+  const data = countryData.filter((item) => languages?.includes(item.value as LanguageEnum));
+
   const [opened, setOpened] = useState(false);
   const [selected, setSelected] = useState(countryData[0]);
 
   useEffect(() => {
-    const item = countryData.find((item) => item.value === language);
+    const item = data.find((item) => item.value === language);
     if (item) {
       setSelected(item);
     }
   }, [language]);
 
-  const items = countryData.map((item) => (
+  const items = data.map((item) => (
     <Menu.Item
       leftSection={
         <Image src={item.image} alt={item.label} width={20} height={15} className={classes.flag} />
@@ -74,7 +85,8 @@ export function CountryPicker({ language, setLanguage }: Props) {
           <IconChevronDown size='1rem' className={classes.icon} />
         </UnstyledButton>
       </Menu.Target>
-      <Menu.Dropdown miw={'fit-content'} maw={'unset'}>
+
+      <Menu.Dropdown miw={'fit-content'} maw={'unset'} mah={400} style={{ overflow: 'scroll' }}>
         {items}
       </Menu.Dropdown>
     </Menu>

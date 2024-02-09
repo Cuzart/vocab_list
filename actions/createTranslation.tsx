@@ -21,10 +21,16 @@ export async function createTranslation({ text, source, target, switched }: Para
   const authKey = process.env.DEEPL_KEY!;
   const translator = new Translator(authKey);
 
+  let sourceLang = switched ? target : source;
+  let targetLang = switched ? source : target;
+
+  if (targetLang === 'en') targetLang = 'en-GB';
+  if (targetLang === 'pt') targetLang = 'pt-PT';
+
   const result = await translator.translateText(
     text,
-    (switched ? target : source) as SourceLanguageCode,
-    (switched ? (source === 'en' ? 'en-GB' : source) : target) as TargetLanguageCode
+    sourceLang as SourceLanguageCode,
+    targetLang as TargetLanguageCode
   );
 
   const newTranslation = {

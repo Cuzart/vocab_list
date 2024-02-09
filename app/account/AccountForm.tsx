@@ -14,7 +14,7 @@ import {
   Slider,
   MultiSelect,
 } from '@mantine/core';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import classes from './AccountForm.module.css';
 import { User } from '@supabase/supabase-js';
 import {
@@ -26,20 +26,21 @@ import {
   IconX,
 } from '@tabler/icons-react';
 import { hasLength, isEmail, matchesField, useForm } from '@mantine/form';
-import { useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { deleteUser } from '@/actions/deleteUser';
 import useBoop from '@/hooks/useBoop';
 import { animated } from 'react-spring';
 import { countryData } from '@/components/CountryPicker/CountryPicker';
+import { Toaster, toast } from 'sonner';
 
 type Props = {
   user: User;
-  isPwChange?: boolean;
+  profileData: { languages: string[]; repetitions: number } | null;
 };
 
-export const AccountForm = ({ user, isPwChange }: Props) => {
+export const AccountForm = ({ user, profileData }: Props) => {
   const [opened, { open, close }] = useDisclosure(false);
   const supabase = createClient();
   const params = useSearchParams();
@@ -47,6 +48,11 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
   const [changePassword, setChangePassword] = useState<string | null>(
     params.get('mode') === 'pw' ? 'password' : null
   );
+
+  const [value, setValue] = useState<string[]>(profileData?.languages || []);
+  const [debouncedValue] = useDebouncedValue(value, 3000);
+  const [sliderValue, setSliderValue] = useState<number>(profileData?.repetitions || 5);
+  const [searchValue, setSearchValue] = useState('');
 
   const form = useForm({
     initialValues: {
@@ -74,6 +80,7 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
 
     setChangePassword(null);
     router.refresh();
+    toast.success('Profil aktualisiert');
   };
 
   const handleDelete = async () => {
@@ -90,12 +97,36 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
     router.refresh();
   };
 
+  const handleProfileUpdate = async () => {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ languages: value, repetitions: sliderValue })
+      .eq('user_id', user.id);
+
+    if (!error) toast.success('Änderung gespeichert');
+  };
+
+  const isMountingRef = useRef(false);
+
+  useEffect(() => {
+    isMountingRef.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!isMountingRef.current) {
+      handleProfileUpdate();
+    } else {
+      isMountingRef.current = false;
+    }
+  }, [debouncedValue]);
+
   return (
     <>
+      <Toaster />
       <Box className={classes.container}>
         <AppHeader />
 
-        <Flex justify={'space-between'} align={'flex-end'} style={{ flexWrap: 'wrap' }} gap={30}>
+        <Flex justify={'space-between'} align={'center'} style={{ flexWrap: 'wrap' }} gap={30}>
           <Box style={{ flexGrow: 1, alignSelf: 'flex-start' }}>
             <Text fz={20} fw={700} mb={20}>
               Profil-Einstellungen
@@ -164,6 +195,47 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
                 </>
               )}
             </Flex>
+
+            <Box pb={60} maw={400}>
+              <Text mt={30} fz={20} fw={700} mb={20}>
+                App-Einstellungen
+              </Text>
+              <MultiSelect
+                mb={30}
+                label='Sprachen'
+                data={countryData}
+                value={value}
+                onChange={setValue}
+                hidePickedOptions
+                searchValue={searchValue}
+                onSearchChange={setSearchValue}
+                searchable
+              />
+
+              <Text size='sm' mb={7} fw={500}>
+                Wiederholungen bis zur Löschung
+              </Text>
+              <Slider
+                min={1}
+                max={10}
+                step={1}
+                value={sliderValue}
+                onChange={setSliderValue}
+                onChangeEnd={handleProfileUpdate}
+                marks={[
+                  { value: 1, label: '1' },
+                  { value: 5, label: '5' },
+                  { value: 10, label: '10' },
+                ]}
+              />
+            </Box>
+
+            {/* <BoopButton
+              icon={<IconCheck />}
+              onClick={handleProfileUpdate}
+              variant={'subtle'}
+              children={'Übernehmen'}
+            /> */}
           </Box>
 
           <Flex direction={'column'} align={'flex-start'} gap={10}>
@@ -197,29 +269,6 @@ export const AccountForm = ({ user, isPwChange }: Props) => {
             />
           </Flex>
         </Flex>
-
-        {/* <Box pb={60}>
-          <Text mt={30} fz={20} fw={700} mb={20}>
-            App-Einstellungen
-          </Text>
-          <MultiSelect mb={20} label='Sprachen' data={countryData} hidePickedOptions></MultiSelect>
-
-          <Text size='sm' mb={7} fw={500}>
-            Wiederholungen bis zur Löschung (bald verfügbar)
-          </Text>
-          <Slider
-            min={1}
-            max={10}
-            step={1}
-            defaultValue={5}
-            marks={[
-              { value: 1, label: '1' },
-              { value: 5, label: '5' },
-              { value: 10, label: '10' },
-            ]}
-            mb={30}
-          />
-        </Box> */}
       </Box>
 
       <Modal opened={opened} onClose={close} title='Account wirklich löschen?'>

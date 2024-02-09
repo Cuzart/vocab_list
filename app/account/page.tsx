@@ -15,5 +15,11 @@ export default async function Index() {
 
   if (!user) redirect('/login');
 
-  return <>{user && <AccountForm user={user} />}</>;
+  const { data: profileData } = await supabase
+    .from('profiles')
+    .select('languages, repetitions')
+    .eq('user_id', user.id)
+    .single();
+
+  return <>{user && <AccountForm user={user} profileData={profileData} />}</>;
 }
