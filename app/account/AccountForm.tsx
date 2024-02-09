@@ -50,7 +50,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
   );
 
   const [value, setValue] = useState<string[]>(profileData?.languages || []);
-  const [debouncedValue] = useDebouncedValue(value, 3000);
+  const [debouncedValue] = useDebouncedValue(value, 2000);
   const [sliderValue, setSliderValue] = useState<number>(profileData?.repetitions || 5);
   const [searchValue, setSearchValue] = useState('');
 
@@ -126,7 +126,13 @@ export const AccountForm = ({ user, profileData }: Props) => {
       <Box className={classes.container}>
         <AppHeader />
 
-        <Flex justify={'space-between'} align={'center'} style={{ flexWrap: 'wrap' }} gap={30}>
+        <Flex
+          justify={'space-between'}
+          align={'center'}
+          style={{ flexWrap: 'wrap' }}
+          gap={30}
+          pb={50}
+        >
           <Box style={{ flexGrow: 1, alignSelf: 'flex-start' }}>
             <Text fz={20} fw={700} mb={20}>
               Profil-Einstellungen
@@ -245,14 +251,21 @@ export const AccountForm = ({ user, profileData }: Props) => {
               color={'gray'}
               variant={'subtle'}
               children={'Email ändern'}
+              disabled={changePassword === 'email'}
+              c={changePassword === 'email' ? 'violet.4' : undefined}
+              bg={changePassword === 'email' ? 'violet.0' : undefined}
             />
             <BoopButton
+              disabled={changePassword === 'password'}
               icon={<IconEditCircle />}
               onClick={() => setChangePassword('password')}
               color={'gray'}
               variant={'subtle'}
               children={'Passwort ändern'}
+              c={changePassword === 'password' ? 'violet.4' : undefined}
+              bg={changePassword === 'password' ? 'violet.0' : undefined}
             />
+
             <BoopButton
               icon={<IconLogout />}
               color={'gray'}
