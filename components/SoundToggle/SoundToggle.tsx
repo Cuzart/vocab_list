@@ -32,14 +32,14 @@ export const SoundToggle = ({ allowSound, setAllowSound }: Props) => {
       <Transition mounted={allowSound} transition={rotate}>
         {(style) => (
           <animated.div style={boopStyle}>
-            <IconVolume style={style} />
+            <IconVolumeOff style={style} />
           </animated.div>
         )}
       </Transition>
       <Transition mounted={!allowSound} transition={rotateReverted}>
         {(style) => (
           <animated.div style={boopStyle}>
-            <IconVolumeOff style={style} />
+            <IconVolume style={style} />
           </animated.div>
         )}
       </Transition>

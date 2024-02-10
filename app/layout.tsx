@@ -7,15 +7,10 @@ import '@mantine/core/styles.css';
 import { Viewport } from 'next';
 import { cookies } from 'next/headers';
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000';
-
 const headingFont = HeadingFont({ weight: ['400', '700'], subsets: ['latin'] });
 const bodyFont = BodyFont({ weight: ['400', '500', '700'], subsets: ['latin'] });
 
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
   title: 'Vocabulist',
   description: 'Quick management of your vocabulary',
 };

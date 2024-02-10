@@ -85,7 +85,6 @@ export const AccountForm = ({ user, profileData }: Props) => {
 
   const handleDelete = async () => {
     const result = await deleteUser(user.id);
-    close();
 
     if (result) {
       router.push('/login');
@@ -202,7 +201,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
               )}
             </Flex>
 
-            <Box pb={60} maw={400}>
+            <Box maw={400}>
               <Text mt={30} fz={20} fw={700} mb={20}>
                 App-Einstellungen
               </Text>
@@ -222,6 +221,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
                 Wiederholungen bis zur Löschung
               </Text>
               <Slider
+                mb={30}
                 min={1}
                 max={10}
                 step={1}
@@ -244,26 +244,31 @@ export const AccountForm = ({ user, profileData }: Props) => {
             /> */}
           </Box>
 
-          <Flex direction={'column'} align={'flex-start'} gap={10}>
+          <Flex
+            direction={'column'}
+            align={'flex-start'}
+            gap={10}
+            pb={'env(safe-area-inset-bottom)'}
+          >
             <BoopButton
+              className={classes.button}
               icon={<IconMail />}
               onClick={() => setChangePassword('email')}
               color={'gray'}
               variant={'subtle'}
               children={'Email ändern'}
               disabled={changePassword === 'email'}
-              c={changePassword === 'email' ? 'violet.4' : undefined}
-              bg={changePassword === 'email' ? 'violet.0' : undefined}
+              data-mode={changePassword === 'email' ? 'active' : undefined}
             />
             <BoopButton
+              className={classes.button}
               disabled={changePassword === 'password'}
               icon={<IconEditCircle />}
               onClick={() => setChangePassword('password')}
               color={'gray'}
               variant={'subtle'}
               children={'Passwort ändern'}
-              c={changePassword === 'password' ? 'violet.4' : undefined}
-              bg={changePassword === 'password' ? 'violet.0' : undefined}
+              data-mode={changePassword === 'password' ? 'active' : undefined}
             />
 
             <BoopButton

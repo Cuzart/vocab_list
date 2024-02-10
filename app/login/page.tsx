@@ -29,7 +29,7 @@ export default async function Login({ searchParams }: { searchParams: { message:
     });
 
     if (error) {
-      return redirect('/login?message=Could not authenticate user');
+      return redirect('/login?message=Bitte überprüfe deine Anmeldedaten');
     }
 
     return redirect('/');
@@ -53,10 +53,10 @@ export default async function Login({ searchParams }: { searchParams: { message:
     });
 
     if (error) {
-      return redirect('/login?message=Could not authenticate user');
+      return redirect('/login?message=Bitte überprüfe deine Anmeldedaten');
     }
 
-    return redirect('/login?message=Check email to continue sign in process');
+    return redirect('/login?message=Bitte überprüfe deine Anmeldedaten');
   };
 
   const cookieStore = cookies();

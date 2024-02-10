@@ -1,8 +1,7 @@
-import { ActionIcon, Group, TextInput } from '@mantine/core';
+import { ActionIcon, Box, TextInput } from '@mantine/core';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import classes from './ChatInput.module.css';
-import { getHotkeyHandler } from '@mantine/hooks';
 import { createTranslation } from '../../actions/createTranslation';
 import { countryData } from '../CountryPicker/CountryPicker';
 import { TranslationEntry } from '@/types';
@@ -63,9 +62,6 @@ export const ChatInput = ({
             ...newEntries[newEntries.length - 1],
             ...res,
           };
-          // newEntries.pop();
-          // newEntries.push(res as TranslationEntry);
-          console.log(newEntries[newEntries.length - 1]);
           return newEntries;
         });
       }
@@ -73,7 +69,7 @@ export const ChatInput = ({
   };
 
   return (
-    <Group className={classes.container} wrap='nowrap' gap={0}>
+    <Box component={'form'} onSubmit={(e) => e.preventDefault()} className={classes.container}>
       <TextInput
         classNames={{ input: classes.input }}
         placeholder={`Wort auf ${
@@ -86,6 +82,7 @@ export const ChatInput = ({
         leftSectionWidth={50}
         rightSection={
           <ActionIcon
+            type='submit'
             radius={6}
             size={'lg'}
             variant={isReadyToBeSent ? 'light' : 'transparent'}
@@ -104,8 +101,8 @@ export const ChatInput = ({
         onChange={(event) => {
           setMessage(event.currentTarget.value);
         }}
-        onKeyDown={getHotkeyHandler([['Enter', () => handleSubmit()]])}
+        // onKeyDown={getHotkeyHandler([['Enter', () => handleSubmit()]])}
       />
-    </Group>
+    </Box>
   );
 };

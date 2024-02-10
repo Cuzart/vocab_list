@@ -4,3 +4,8 @@
   height: 100dvh;
   padding: 100px 20px 0px;
 }
+
+.button[data-mode='active'] {
+  color: var(--mantine-color-violet-4);
+  background-color: light-dark(var(--mantine-color-violet-0), #c0aefa10);
+}
