@@ -70,7 +70,7 @@ export const ChatInput = ({
 
   return (
     <Box component={'form'} onSubmit={(e) => e.preventDefault()} className={classes.container}>
-      <Container>
+      <Container p={0}>
         <TextInput
           classNames={{ input: classes.input }}
           placeholder={`Wort auf ${
