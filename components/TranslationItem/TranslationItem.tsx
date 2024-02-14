@@ -68,7 +68,7 @@ export const TranslationItem = ({
 
   const read = async (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = switched ? 'de-DE' : language;
+    utterance.lang = language;
     window.speechSynthesis.speak(utterance);
   };
 
@@ -95,7 +95,7 @@ export const TranslationItem = ({
         handleOptimisticDelete();
       }
       if (allowSound && eventData.deltaX > 100) {
-        read(displayedOriginal);
+        read(original);
       }
       setOffset(0);
       setOffsetContainer(0);

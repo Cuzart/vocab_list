@@ -8,7 +8,7 @@ import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { TranslationItem } from '../TranslationItem/TranslationItem';
 import { ChatInput } from '../ChatInput/ChatInput';
 import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
-import { IconUser, IconVocabulary } from '@tabler/icons-react';
+import { IconArrowLeft, IconUser, IconVocabulary } from '@tabler/icons-react';
 import { LanguageEnum, TranslationEntry } from '@/types';
 import classes from './AppContent.module.css';
 import Link from 'next/link';
@@ -17,6 +17,7 @@ import { animated } from 'react-spring';
 import { SoundToggle } from '../SoundToggle/SoundToggle';
 import Image from 'next/image';
 import EmptyState from '@/public/empty.svg';
+import { usePathname } from 'next/navigation';
 
 type Props = {
   entries: TranslationEntry[];
@@ -48,7 +49,7 @@ export const AppContent = ({ entries: initialEntries, profileData }: Props) => {
 
   return (
     <>
-      <Box pos={'relative'} style={{ overflowX: 'hidden' }}>
+      <Box pos={'relative'}>
         <AppHeader
           hidden={hidden}
           setHidden={setHidden}
@@ -62,8 +63,8 @@ export const AppContent = ({ entries: initialEntries, profileData }: Props) => {
         <Stack
           ref={containerRef}
           className={classes.stack}
-          h={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
-          mah={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
+          // h={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
+          // mah={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
         >
           {filteredEntries?.map((note) => (
             <TranslationItem
@@ -123,31 +124,32 @@ export const AppHeader = ({
   languages,
 }: Partial<AppHeaderProps>) => {
   const matches = useMediaQuery('(min-width: 640px)');
+  const pathname = usePathname();
+
+  const [style, trigger] = useBoop({ rotation: 10, timing: 300 });
 
   const isScrolledDownRef = useRef(false);
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   // to avoid using scroll position as state which causes unnecessary rerenders
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10 && !isScrolledDownRef.current) {
+    const handleScroll = (event: any) => {
+      const y = window.scrollY;
+      if (y > 30 && !isScrolledDownRef.current) {
         isScrolledDownRef.current = true;
         setIsScrolledDown(true);
       }
-      if (window.scrollY <= 10 && isScrolledDownRef.current) {
+      if (y <= 30 && isScrolledDownRef.current) {
         isScrolledDownRef.current = false;
         setIsScrolledDown(false);
       }
     };
 
-    document.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      document.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const [style, trigger] = useBoop({ rotation: 10, timing: 300 });
-
   return (
     <Group
       className={classes.header}
@@ -157,7 +159,16 @@ export const AppHeader = ({
       data-compact={isScrolledDown ? 'true' : 'false'}
     >
       <Link href='/' style={{ textDecoration: 'none' }}>
-        <Flex align={'center'} gap={5}>
+        <Flex
+          className={classes.logoWrapper}
+          data-account={pathname === '/account' ? true : undefined}
+          align={'center'}
+          gap={5}
+          pos={'relative'}
+        >
+          <ThemeIcon className={classes.icon} variant='transparent'>
+            <IconArrowLeft size={24} stroke={2.5} />
+          </ThemeIcon>
           <ThemeIcon size={36} variant='transparent'>
             <IconVocabulary size={36} />
           </ThemeIcon>

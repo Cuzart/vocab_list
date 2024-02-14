@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9;
+  z-index: 2;
   background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9));
   width: 100%;
   max-width: 57.5rem;
@@ -17,7 +17,9 @@
 
   &[data-compact='true'] {
     padding-bottom: 5px;
-    padding-top: calc(env(safe-area-inset-bottom) + 5px);
+    padding-top: 5px;
+    background: light-dark(#f8f9fa99, #10111399) !important;
+    backdrop-filter: blur(1px);
 
     h1 {
       font-size: 2rem;
@@ -34,9 +36,8 @@
 
 .stack {
   padding: 100px 20px;
-  padding-bottom: 20px;
-  overflow: scroll;
-  overflow-x: hidden;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+  min-height: 100dvh;
 }
 
 .title {
@@ -51,4 +52,60 @@
 .actionIcon:hover {
   background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
   border-color: light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-5));
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  animation: out 200ms linear forwards;
+}
+
+@keyframes padding {
+  from {
+    padding-left: 0rem;
+  }
+  to {
+    padding-left: 1.5rem;
+  }
+}
+@keyframes paddingReverse {
+  from {
+    padding-left: 1.5rem;
+  }
+  to {
+    padding-left: 0rem;
+  }
+}
+
+@keyframes in {
+  from {
+    opacity: 0;
+    transform: translate(-30px, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+}
+@keyframes out {
+  from {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translate(-30px, -50%);
+    opacity: 0;
+  }
+}
+
+.logoWrapper {
+  animation: paddingReverse 200ms linear forwards;
+  &[data-account='true'] {
+    animation: padding 200ms linear forwards;
+    .icon {
+      animation: in 200ms linear forwards;
+    }
+  }
 }

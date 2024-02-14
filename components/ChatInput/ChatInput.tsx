@@ -1,4 +1,4 @@
-import { ActionIcon, Box, TextInput } from '@mantine/core';
+import { ActionIcon, Box, Container, TextInput } from '@mantine/core';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import classes from './ChatInput.module.css';
@@ -70,39 +70,41 @@ export const ChatInput = ({
 
   return (
     <Box component={'form'} onSubmit={(e) => e.preventDefault()} className={classes.container}>
-      <TextInput
-        classNames={{ input: classes.input }}
-        placeholder={`Wort auf ${
-          switched ? 'Deutsch' : countryData.find((c) => c.value === language)?.label
-        }`}
-        size='md'
-        w={'100%'}
-        radius={'sm'}
-        leftSection={<DirectionToggle switched={switched} setSwitched={setSwitched} />}
-        leftSectionWidth={50}
-        rightSection={
-          <ActionIcon
-            type='submit'
-            radius={6}
-            size={'lg'}
-            variant={isReadyToBeSent ? 'light' : 'transparent'}
-            color={isReadyToBeSent ? 'violet.4' : 'gray.4'}
-            opacity={1}
-            onClick={() => handleSubmit()}
-            style={{
-              transition: 'all 0.2s ease',
-              transform: isReadyToBeSent ? 'translateX(0px)' : 'translateX(-4px)',
-            }}
-          >
-            <IconArrowNarrowRight />
-          </ActionIcon>
-        }
-        value={message}
-        onChange={(event) => {
-          setMessage(event.currentTarget.value);
-        }}
-        // onKeyDown={getHotkeyHandler([['Enter', () => handleSubmit()]])}
-      />
+      <Container>
+        <TextInput
+          classNames={{ input: classes.input }}
+          placeholder={`Wort auf ${
+            switched ? 'Deutsch' : countryData.find((c) => c.value === language)?.label
+          }`}
+          size='md'
+          w={'100%'}
+          radius={'sm'}
+          leftSection={<DirectionToggle switched={switched} setSwitched={setSwitched} />}
+          leftSectionWidth={50}
+          rightSection={
+            <ActionIcon
+              type='submit'
+              radius={6}
+              size={'lg'}
+              variant={isReadyToBeSent ? 'light' : 'transparent'}
+              color={isReadyToBeSent ? 'violet.4' : 'gray.4'}
+              opacity={1}
+              onClick={() => handleSubmit()}
+              style={{
+                transition: 'all 0.2s ease',
+                transform: isReadyToBeSent ? 'translateX(0px)' : 'translateX(-4px)',
+              }}
+            >
+              <IconArrowNarrowRight />
+            </ActionIcon>
+          }
+          value={message}
+          onChange={(event) => {
+            setMessage(event.currentTarget.value);
+          }}
+          // onKeyDown={getHotkeyHandler([['Enter', () => handleSubmit()]])}
+        />
+      </Container>
     </Box>
   );
 };
