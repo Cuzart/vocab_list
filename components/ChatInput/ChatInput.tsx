@@ -1,12 +1,12 @@
+import { TranslationEntry } from '@/types';
 import { ActionIcon, Box, Container, TextInput } from '@mantine/core';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import React, { useState } from 'react';
-import classes from './ChatInput.module.css';
+import { v4 as uuidv4 } from 'uuid';
 import { createTranslation } from '../../actions/createTranslation';
 import { countryData } from '../CountryPicker/CountryPicker';
-import { TranslationEntry } from '@/types';
 import { DirectionToggle } from '../DirectionToggle/DirectionToggle';
-import { v4 as uuidv4 } from 'uuid';
+import classes from './ChatInput.module.css';
 
 type ChatInputProps = {
   language: string;

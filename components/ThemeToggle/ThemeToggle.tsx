@@ -1,8 +1,8 @@
-import { ActionIcon, useMantineColorScheme, useComputedColorScheme, Group } from '@mantine/core';
-import { IconSun, IconMoon } from '@tabler/icons-react';
-import classes from './ThemeToggle.module.css';
 import useBoop from '@/hooks/useBoop';
+import { ActionIcon, Group, useComputedColorScheme, useMantineColorScheme } from '@mantine/core';
+import { IconMoon, IconSun } from '@tabler/icons-react';
 import { animated } from 'react-spring';
+import classes from './ThemeToggle.module.css';
 
 export function ThemeToggle() {
   const { setColorScheme } = useMantineColorScheme();

@@ -1,7 +1,7 @@
-import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
 import { AppContent } from '@/components/AppContent/AppContent';
 import { TranslationEntry } from '@/types';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';

@@ -1,23 +1,23 @@
 'use client';
 
-import { ActionIcon, Text, Box, Center, Flex, Group, Stack, ThemeIcon, Title } from '@mantine/core';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { HideToggle } from '../HideToggle/HideToggle';
-import { CountryPicker } from '../CountryPicker/CountryPicker';
-import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
-import { TranslationItem } from '../TranslationItem/TranslationItem';
-import { ChatInput } from '../ChatInput/ChatInput';
+import useBoop from '@/hooks/useBoop';
+import EmptyState from '@/public/empty.svg';
+import { LanguageEnum, TranslationEntry } from '@/types';
+import { ActionIcon, Box, Center, Flex, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
 import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
 import { IconArrowLeft, IconUser, IconVocabulary } from '@tabler/icons-react';
-import { LanguageEnum, TranslationEntry } from '@/types';
-import classes from './AppContent.module.css';
-import Link from 'next/link';
-import useBoop from '@/hooks/useBoop';
-import { animated } from 'react-spring';
-import { SoundToggle } from '../SoundToggle/SoundToggle';
 import Image from 'next/image';
-import EmptyState from '@/public/empty.svg';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { animated } from 'react-spring';
+import { ChatInput } from '../ChatInput/ChatInput';
+import { CountryPicker } from '../CountryPicker/CountryPicker';
+import { HideToggle } from '../HideToggle/HideToggle';
+import { SoundToggle } from '../SoundToggle/SoundToggle';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
+import { TranslationItem } from '../TranslationItem/TranslationItem';
+import classes from './AppContent.module.css';
 
 type Props = {
   entries: TranslationEntry[];

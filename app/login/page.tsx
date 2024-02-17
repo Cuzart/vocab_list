@@ -1,18 +1,8 @@
-import { cookies, headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
-import {
-  Alert,
-  Anchor,
-  Box,
-  Button,
-  Center,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { Alert, Anchor, Box, Button, Center, PasswordInput, TextInput, Title } from '@mantine/core';
+import { cookies, headers } from 'next/headers';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 export default async function Login({ searchParams }: { searchParams: { message: string } }) {
   const signIn = async (formData: FormData) => {

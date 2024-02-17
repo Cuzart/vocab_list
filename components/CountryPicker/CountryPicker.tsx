@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { UnstyledButton, Menu, Group, ThemeIcon } from '@mantine/core';
-import { IconChevronDown } from '@tabler/icons-react';
-import images from './images';
-import classes from './CountryPicker.module.css';
 import { LanguageEnum } from '@/types';
+import { Group, Menu, UnstyledButton } from '@mantine/core';
+import { IconChevronDown } from '@tabler/icons-react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import classes from './CountryPicker.module.css';
+import images from './images';
 
 export const countryData = [
   { value: 'zh', label: 'Chinesisch', image: images.cn },

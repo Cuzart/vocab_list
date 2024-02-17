@@ -1,7 +1,7 @@
+import { AccountForm } from '@/components/AccountForm/AccountForm';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
-import { redirect, useSearchParams } from 'next/navigation';
-import { AccountForm } from './AccountForm';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 

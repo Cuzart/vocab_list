@@ -1,10 +1,9 @@
+import useBoop from '@/hooks/useBoop';
+import { rotate, rotateReverted } from '@/utils/animations';
 import { ActionIcon, Transition } from '@mantine/core';
 import { IconVolume, IconVolumeOff } from '@tabler/icons-react';
-import React from 'react';
-import classes from './SoundToggle.module.css';
-import { rotate, rotateReverted } from '@/utils/animations';
-import useBoop from '@/hooks/useBoop';
 import { animated } from 'react-spring';
+import classes from './SoundToggle.module.css';
 
 type Props = {
   allowSound: boolean;

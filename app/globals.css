@@ -9,3 +9,8 @@ html {
     background: var(--mantine-color-gray-0) !important;
   }
 }
+
+html,
+body {
+  overflow-x: hidden;
+}

@@ -1,21 +1,23 @@
 'use client';
 
+import { deleteUser } from '@/actions/deleteUser';
 import { AppHeader } from '@/components/AppContent/AppContent';
+import { countryData } from '@/components/CountryPicker/CountryPicker';
+import { createClient } from '@/utils/supabase/client';
 import {
   Box,
   Button,
   Divider,
   Flex,
-  Text,
   Modal,
-  PasswordInput,
-  TextInput,
-  ButtonProps,
-  Slider,
   MultiSelect,
+  PasswordInput,
+  Slider,
+  Text,
+  TextInput,
 } from '@mantine/core';
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import classes from './AccountForm.module.css';
+import { hasLength, isEmail, matchesField, useForm } from '@mantine/form';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { User } from '@supabase/supabase-js';
 import {
   IconCheck,
@@ -25,15 +27,11 @@ import {
   IconTrash,
   IconX,
 } from '@tabler/icons-react';
-import { hasLength, isEmail, matchesField, useForm } from '@mantine/form';
-import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import { createClient } from '@/utils/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { deleteUser } from '@/actions/deleteUser';
-import useBoop from '@/hooks/useBoop';
-import { animated } from 'react-spring';
-import { countryData } from '@/components/CountryPicker/CountryPicker';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Toaster, toast } from 'sonner';
+import { BoopButton } from '../BoopButton/BoopButton';
+import classes from './AccountForm.module.css';
 
 type Props = {
   user: User;
@@ -235,13 +233,6 @@ export const AccountForm = ({ user, profileData }: Props) => {
                 ]}
               />
             </Box>
-
-            {/* <BoopButton
-              icon={<IconCheck />}
-              onClick={handleProfileUpdate}
-              variant={'subtle'}
-              children={'Übernehmen'}
-            /> */}
           </Box>
 
           <Flex
@@ -310,19 +301,5 @@ export const AccountForm = ({ user, profileData }: Props) => {
         </Flex>
       </Modal>
     </>
-  );
-};
-
-const BoopButton = ({
-  icon,
-  ...props
-}: ButtonProps & { icon: React.ReactNode; onClick: () => void }) => {
-  const [style, trigger] = useBoop({ rotation: 5, timing: 300 });
-  return (
-    <Button
-      leftSection={<animated.div style={style}>{icon}</animated.div>}
-      onMouseEnter={trigger}
-      {...props}
-    />
   );
 };

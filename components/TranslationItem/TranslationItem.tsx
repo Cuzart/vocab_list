@@ -1,11 +1,11 @@
-import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/core';
-import { IconArrowUp, IconTrash, IconVolume } from '@tabler/icons-react';
-import React, { useEffect } from 'react';
-import classes from './TranslationItem.module.css';
-import { useSwipeable } from 'react-swipeable';
 import { deleteTranslation } from '@/actions/deleteTranslation';
 import { increaseTranslationCount } from '@/actions/increaseTranslationCount';
 import { TranslationEntry } from '@/types';
+import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/core';
+import { IconArrowUp, IconTrash, IconVolume } from '@tabler/icons-react';
+import React, { useEffect } from 'react';
+import { useSwipeable } from 'react-swipeable';
+import classes from './TranslationItem.module.css';
 
 const config = {
   delta: 10, // min distance(px) before a swipe starts. *See Notes*

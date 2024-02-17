@@ -1,11 +1,10 @@
-import { GeistSans } from 'geist/font/sans';
-import { Eczar as HeadingFont } from 'next/font/google';
-import { Space_Grotesk as BodyFont } from 'next/font/google';
-import './globals.css';
 import { ColorSchemeScript, Container, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { GeistSans } from 'geist/font/sans';
 import { Viewport } from 'next';
+import { Space_Grotesk as BodyFont, Eczar as HeadingFont } from 'next/font/google';
 import { cookies } from 'next/headers';
+import './globals.css';
 
 const headingFont = HeadingFont({ weight: ['400', '700'], subsets: ['latin'] });
 const bodyFont = BodyFont({ weight: ['400', '500', '700'], subsets: ['latin'] });

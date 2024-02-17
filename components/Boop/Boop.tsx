@@ -1,4 +1,3 @@
-// components/Boop.jsx
 import useBoop from '@/hooks/useBoop';
 import React from 'react';
 import { animated } from 'react-spring';

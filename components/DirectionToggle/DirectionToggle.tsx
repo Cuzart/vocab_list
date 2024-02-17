@@ -1,9 +1,8 @@
-import { ActionIcon, Indicator } from '@mantine/core';
-import { IconArrowsLeftRight, IconFlag } from '@tabler/icons-react';
-import React from 'react';
-import classes from './DirectionToggle.module.css';
 import useBoop from '@/hooks/useBoop';
+import { ActionIcon, Indicator } from '@mantine/core';
+import { IconArrowsLeftRight } from '@tabler/icons-react';
 import { animated } from 'react-spring';
+import classes from './DirectionToggle.module.css';
 
 type Props = {
   switched: boolean;
