@@ -4,7 +4,7 @@ import useBoop from '@/hooks/useBoop';
 import EmptyState from '@/public/empty.svg';
 import { LanguageEnum, TranslationEntry } from '@/types';
 import { ActionIcon, Box, Center, Flex, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
-import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
+import { useLocalStorage } from '@mantine/hooks';
 import { IconArrowLeft, IconUser, IconVocabulary } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -69,7 +69,7 @@ export const AppContent = ({ entries: initialEntries, profileData }: Props) => {
           {filteredEntries?.map((note) => (
             <TranslationItem
               id={note.id}
-              key={note.keyId || note.id}
+              // key={note.keyId || note.id}
               original={note.original}
               translation={note.translation}
               visible={!hidden}
@@ -123,7 +123,6 @@ export const AppHeader = ({
   setAllowSound,
   languages,
 }: Partial<AppHeaderProps>) => {
-  const matches = useMediaQuery('(min-width: 640px)');
   const pathname = usePathname();
 
   const [style, trigger] = useBoop({ rotation: 10, timing: 300 });
@@ -172,7 +171,7 @@ export const AppHeader = ({
           <ThemeIcon size={36} variant='transparent'>
             <IconVocabulary size={36} />
           </ThemeIcon>
-          {matches && <Title className={classes.title}>Vocabulist</Title>}
+          <Title className={classes.title}>Vocabulist</Title>
         </Flex>
       </Link>
       <Flex gap={10}>

@@ -5,6 +5,7 @@ import { Viewport } from 'next';
 import { Space_Grotesk as BodyFont, Eczar as HeadingFont } from 'next/font/google';
 import { cookies } from 'next/headers';
 import './globals.css';
+import { ClientProvider } from '@/components/ClientProvider';
 
 const headingFont = HeadingFont({ weight: ['400', '700'], subsets: ['latin'] });
 const bodyFont = BodyFont({ weight: ['400', '500', '700'], subsets: ['latin'] });
@@ -35,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <ColorSchemeScript />
       </head>
-      <body>
+      <body className='preload'>
         <MantineProvider
           theme={{
             primaryColor: 'violet',
@@ -46,11 +47,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             },
           }}
         >
-          <main>
-            <Container pos={'relative'} p={0}>
-              {children}
-            </Container>
-          </main>
+          <ClientProvider>
+            <main>
+              <Container pos={'relative'} p={0}>
+                {children}
+              </Container>
+            </main>
+          </ClientProvider>
         </MantineProvider>
       </body>
     </html>
