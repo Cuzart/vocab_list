@@ -4,18 +4,7 @@ import { TranslationEntry } from '@/types';
 import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/core';
 import { IconArrowUp, IconTrash, IconVolume } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
-import { useSwipeable } from 'react-swipeable';
 import classes from './TranslationItem.module.css';
-
-const config = {
-  delta: 10, // min distance(px) before a swipe starts. *See Notes*
-  preventScrollOnSwipe: false, // prevents scroll during swipe (*See Details*)
-  trackTouch: true, // track touch input
-  trackMouse: true, // track mouse input
-  rotationAngle: 0, // set a rotation angle
-  swipeDuration: Infinity, // allowable duration of a swipe (ms). *See Notes*
-  touchEventOptions: { passive: true }, // options for touch listeners (*See Details*)
-};
 
 type Props = {
   id: string | number;
@@ -44,8 +33,6 @@ export const TranslationItem = ({
 }: Props) => {
   const [opened, setOpened] = React.useState(false);
   const [count, setCount] = React.useState(initialCount || 0);
-  const [offset, setOffset] = React.useState(0);
-  const [offsetContainer, setOffsetContainer] = React.useState(0);
 
   useEffect(() => {
     visible !== undefined && setOpened(visible);
@@ -62,47 +49,24 @@ export const TranslationItem = ({
       return newEntries;
     });
     const res = await deleteTranslation({ id: id as number });
-
     !res && setEntries(() => previous);
   };
 
-  const read = async (text: string) => {
+  const read = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = language;
+    utterance.onend = () => {
+      underlayRef.current?.style.setProperty('--swipe-opacity', '0');
+      paperRef.current?.style.setProperty('--swipe-amount', '0px');
+
+      setTimeout(() => {
+        paperRef.current?.style.setProperty('transition', 'none');
+        toastRef.current?.style.setProperty('transition', 'none');
+        swipesLeft && setSwipesLeft(false);
+      }, 300);
+    };
     window.speechSynthesis.speak(utterance);
   };
-
-  const handlers = useSwipeable({
-    onSwiping: (eventData) => {
-      if (eventData.dir === 'Left') {
-        if (eventData.deltaX > -60) {
-          setOffset(eventData.deltaX);
-        } else {
-          setOffsetContainer(eventData.deltaX + 60);
-        }
-      }
-      if (allowSound && eventData.dir === 'Right') {
-        if (eventData.deltaX < 60) {
-          setOffset(eventData.deltaX);
-        } else {
-          setOffsetContainer(eventData.deltaX - 60);
-        }
-      }
-    },
-
-    onSwiped: async (eventData) => {
-      if (eventData.deltaX < -100) {
-        handleOptimisticDelete();
-      }
-      if (allowSound && eventData.deltaX > 100) {
-        read(original);
-      }
-      setOffset(0);
-      setOffsetContainer(0);
-    },
-
-    ...config,
-  });
 
   const displayedTranslation = switched ? original : translation;
   const displayedOriginal = switched ? translation : original;
@@ -111,22 +75,105 @@ export const TranslationItem = ({
   // const [menuOpened, setMenuOpened] = React.useState(false);
   // const ref = useClickOutside(() => setMenuOpened(false));
 
+  const SWIPE_THRESHOLD = 100;
+  const toastRef = React.useRef<HTMLDivElement>(null);
+  const paperRef = React.useRef<HTMLDivElement>(null);
+  const underlayRef = React.useRef<HTMLDivElement>(null);
+  const pointerStartRef = React.useRef<{ x: number; y: number } | null>(null);
+  const dragStartTime = React.useRef<Date | null>(null);
+
+  const [swipesLeft, setSwipesLeft] = React.useState(false);
+  const [swipeOut, setSwipeOut] = React.useState(false);
+
   return (
     <>
       {count < repetitionLimit && (
         <Box
+          ref={toastRef}
           className={classes.container}
-          data-left={offset > 0 && true}
-          mod={{ opened }}
-          style={{ transform: `translateX(${offsetContainer}px)` }}
-          {...handlers}
+          data-left={swipesLeft ? 'true' : undefined}
+          data-opened={opened ? 'true' : undefined}
+          data-swipe-out={swipeOut ? 'true' : undefined}
+          onPointerDown={(event) => {
+            dragStartTime.current = new Date();
+            // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
+            (event.target as HTMLElement).setPointerCapture(event.pointerId);
+            if ((event.target as HTMLElement).tagName === 'BUTTON') return;
+
+            pointerStartRef.current = { x: event.clientX, y: event.clientY };
+          }}
+          onPointerUp={() => {
+            if (swipeOut) return;
+
+            pointerStartRef.current = null;
+
+            underlayRef.current?.style.setProperty('--swipe-opacity', '0');
+
+            const swipeAmount = Number(
+              paperRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0
+            );
+
+            const timeTaken = new Date().getTime() - dragStartTime.current?.getTime()! || 0;
+            const velocity = Math.abs(swipeAmount) / timeTaken;
+
+            // Remove only if threshold is met
+            if (Math.abs(swipeAmount) >= 75 || velocity > 0.11) {
+              if (swipeAmount > 0) {
+                toastRef.current?.style.setProperty('transition', 'all 300ms ease');
+                paperRef.current?.style.setProperty('transition', 'all 300ms ease');
+                toastRef.current?.style.setProperty('--swipe-amount', '0px');
+                underlayRef.current?.style.setProperty('--swipe-opacity', '1');
+                paperRef.current?.style.setProperty('--swipe-amount', '60px');
+                read(displayedOriginal);
+              } else {
+                setSwipeOut(true);
+                setTimeout(() => {
+                  handleOptimisticDelete();
+                }, 250);
+              }
+
+              return;
+            }
+
+            // reset
+            if (Math.abs(swipeAmount) > 0) {
+              swipesLeft && setSwipesLeft(false);
+              toastRef.current?.style.setProperty('--swipe-amount', '0px');
+              paperRef.current?.style.setProperty('--swipe-amount', '0px');
+            } else {
+              // toggle only when threshold is not met and no swipe has been made
+              setOpened(!opened);
+            }
+          }}
+          onPointerMove={(event) => {
+            if (!pointerStartRef.current) return;
+
+            const xPosition = event.clientX - pointerStartRef.current.x;
+
+            if (!allowSound && xPosition > 0) return;
+            if (!swipesLeft && xPosition > 0) setSwipesLeft(true);
+
+            let toastOffset = 0;
+
+            if (Math.abs(xPosition) > 80) {
+              toastOffset = xPosition + (xPosition < 0 ? 80 : -80);
+              toastRef.current?.style.setProperty('--swipe-amount', `${toastOffset}px`);
+            } else {
+              paperRef.current?.style.setProperty('--swipe-amount', `${xPosition}px`);
+            }
+
+            underlayRef.current?.style.setProperty(
+              '--swipe-opacity',
+              `${Math.abs(toastOffset / 100) + Math.abs(xPosition / 100) + 0.4}`
+            );
+          }}
         >
           <Paper
+            ref={paperRef}
             className={classes.paper}
             p={10}
             px={20}
-            style={{ transform: `translateX(${offset}px)` }}
-            onClick={(e) => setOpened(!opened)}
+
             // onMouseDown={() => {
             //   if (menuOpened) {
             //     setMenuOpened(false);
@@ -142,20 +189,6 @@ export const TranslationItem = ({
               <div>
                 <Flex align={'center'}>
                   <Text fw={500}>{displayedOriginal}</Text>
-                  {/* {allowSound && (
-                    <ActionIcon
-                      size={'lg'}
-                      w={'auto'}
-                      variant='transparent'
-                      px={6}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        read(displayedOriginal);
-                      }}
-                    >
-                      <IconVolume />
-                    </ActionIcon>
-                  )} */}
                 </Flex>
                 <Collapse in={opened}>
                   <Text c={'dimmed'}>
@@ -191,13 +224,10 @@ export const TranslationItem = ({
               </ActionIcon>
             </Flex>
           </Paper>
-          <Box
-            data-left={offset > 0 && true}
-            className={classes.underlay}
-            opacity={Math.abs(offset / 100) + Math.abs(offsetContainer / 100)}
-          >
-            {offset > 0 ? <IconVolume /> : <IconTrash />}
-          </Box>
+          <Flex ref={underlayRef} className={classes.underlay} justify={'space-between'}>
+            <IconVolume />
+            <IconTrash />
+          </Flex>
         </Box>
       )}
     </>

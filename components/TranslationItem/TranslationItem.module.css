@@ -3,10 +3,15 @@
   cursor: pointer;
   position: relative;
   border-left: 6px solid transparent;
-  transition: all 200ms ease;
+  /* transition: all 200ms ease; */
   z-index: 2;
   border: 1px solid;
   border-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-6));
+
+  transform: translateX(var(--swipe-amount, 0px));
+  transition: none;
+  /* &[data-swiping='true'] {
+  } */
 }
 
 .paper:hover {
@@ -30,6 +35,9 @@
 
 .container {
   position: relative;
+  /* touch-action: none; */
+  transform: translateX(var(--swipe-amount, 0px));
+  transition: none;
 
   &[data-opened='true'] {
     .paper::before {
@@ -42,6 +50,22 @@
       width: 0px;
     }
   }
+
+  &[data-swipe-out='true'] {
+    animation: swipe-out 200ms ease-out forwards;
+  }
+
+  @keyframes swipe-out {
+    from {
+      transform: translateX(var(--swipe-amount));
+      opacity: 1;
+    }
+
+    to {
+      transform: translateX(calc(var(--swipe-amount) - 30px));
+      opacity: 0;
+    }
+  }
 }
 
 .underlay {
@@ -51,7 +75,7 @@
   right: 0;
   width: 100%;
   height: 100%;
-  /* transition: opacity 200ms ease; */
+  transition: opacity 200ms ease;
   background: var(--mantine-color-red-6);
   background: rgb(62, 62, 62);
   background: linear-gradient(
@@ -61,18 +85,14 @@
   );
   border-radius: 4px;
   z-index: 1;
-  display: flex;
-  justify-content: flex-end;
   align-items: center;
+
+  opacity: var(--swipe-opacity, 0.5);
 
   svg {
     width: 24px;
     height: 24px;
     color: white;
     margin: 0 16px;
-  }
-
-  &[data-left='true'] {
-    justify-content: flex-start;
   }
 }

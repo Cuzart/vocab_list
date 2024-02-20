@@ -69,7 +69,7 @@ export const AppContent = ({ entries: initialEntries, profileData }: Props) => {
           {filteredEntries?.map((note) => (
             <TranslationItem
               id={note.id}
-              // key={note.keyId || note.id}
+              key={note.keyId || note.id}
               original={note.original}
               translation={note.translation}
               visible={!hidden}
@@ -82,7 +82,7 @@ export const AppContent = ({ entries: initialEntries, profileData }: Props) => {
             />
           ))}
           {filteredEntries?.length === 0 && (
-            <Center h={'100%'} ta={'center'}>
+            <Center h={'70vh'} ta={'center'}>
               <div>
                 <Image width={300} height={250} src={EmptyState} alt={''} priority />
                 <Text>Noch keine Einträge</Text>
