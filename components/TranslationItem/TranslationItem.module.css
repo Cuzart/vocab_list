@@ -10,8 +10,6 @@
 
   transform: translateX(var(--swipe-amount, 0px));
   transition: none;
-  /* &[data-swiping='true'] {
-  } */
 }
 
 .paper:hover {

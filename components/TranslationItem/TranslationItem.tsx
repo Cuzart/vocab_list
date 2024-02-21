@@ -71,11 +71,7 @@ export const TranslationItem = ({
   const displayedTranslation = switched ? original : translation;
   const displayedOriginal = switched ? translation : original;
 
-  // const timeOutRef = React.useRef<any>(null);
-  // const [menuOpened, setMenuOpened] = React.useState(false);
-  // const ref = useClickOutside(() => setMenuOpened(false));
-
-  const SWIPE_THRESHOLD = 100;
+  const SWIPE_THRESHOLD = 80;
   const toastRef = React.useRef<HTMLDivElement>(null);
   const paperRef = React.useRef<HTMLDivElement>(null);
   const underlayRef = React.useRef<HTMLDivElement>(null);
@@ -84,6 +80,87 @@ export const TranslationItem = ({
 
   const [swipesLeft, setSwipesLeft] = React.useState(false);
   const [swipeOut, setSwipeOut] = React.useState(false);
+
+  const handlers = {
+    onSwipeStart: (event: any) => {
+      dragStartTime.current = new Date();
+      // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
+      (event.target as HTMLElement).setPointerCapture(event.pointerId);
+      if ((event.target as HTMLElement).tagName === 'BUTTON') return;
+
+      pointerStartRef.current = { x: event.clientX, y: event.clientY };
+    },
+    onSwipeEnd: () => {
+      if (swipeOut) return;
+
+      toastRef.current?.style.setProperty('transition', 'all 300ms ease');
+      paperRef.current?.style.setProperty('transition', 'all 300ms ease');
+
+      pointerStartRef.current = null;
+
+      underlayRef.current?.style.setProperty('--swipe-opacity', '0');
+
+      const swipeAmount = Number(
+        paperRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0
+      );
+
+      const timeTaken = new Date().getTime() - dragStartTime.current?.getTime()! || 0;
+      const velocity = Math.abs(swipeAmount) / timeTaken;
+
+      if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD - 5 || velocity > 0.15) {
+        // sometimes stops before threshold
+        // Remove only if threshold is met
+        if (swipeAmount > 0) {
+          toastRef.current?.style.setProperty('--swipe-amount', '0px');
+          underlayRef.current?.style.setProperty('--swipe-opacity', '1');
+          paperRef.current?.style.setProperty('--swipe-amount', '60px');
+          read(original);
+        } else {
+          setSwipeOut(true);
+          setTimeout(() => {
+            handleOptimisticDelete();
+          }, 250);
+        }
+
+        return;
+      }
+
+      // reset
+      if (Math.abs(swipeAmount) > 0) {
+        swipesLeft && setSwipesLeft(false);
+        toastRef.current?.style.setProperty('--swipe-amount', '0px');
+        paperRef.current?.style.setProperty('--swipe-amount', '0px');
+        setTimeout(() => {
+          toastRef.current?.style.setProperty('transition', 'none');
+          paperRef.current?.style.setProperty('transition', 'none');
+        }, 250);
+      }
+    },
+    onSwipe: (event: any) => {
+      if (!pointerStartRef.current) return;
+
+      const xPosition =
+        (event.type === 'touchmove' ? event.touches[0].clientX : event.clientX) -
+        pointerStartRef.current.x;
+
+      if (!allowSound && xPosition > 0) return;
+      if (!swipesLeft && xPosition > 0) setSwipesLeft(true);
+
+      let toastOffset = 0;
+
+      if (Math.abs(xPosition) > SWIPE_THRESHOLD) {
+        toastOffset = xPosition + (xPosition < 0 ? SWIPE_THRESHOLD : -SWIPE_THRESHOLD);
+        toastRef.current?.style.setProperty('--swipe-amount', `${toastOffset}px`);
+      } else {
+        paperRef.current?.style.setProperty('--swipe-amount', `${xPosition}px`);
+      }
+
+      underlayRef.current?.style.setProperty(
+        '--swipe-opacity',
+        `${Math.abs(toastOffset / 100) + Math.abs(xPosition / 100) + 0.4}`
+      );
+    },
+  };
 
   return (
     <>
@@ -94,97 +171,18 @@ export const TranslationItem = ({
           data-left={swipesLeft ? 'true' : undefined}
           data-opened={opened ? 'true' : undefined}
           data-swipe-out={swipeOut ? 'true' : undefined}
-          onPointerDown={(event) => {
-            dragStartTime.current = new Date();
-            // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
-            (event.target as HTMLElement).setPointerCapture(event.pointerId);
-            if ((event.target as HTMLElement).tagName === 'BUTTON') return;
-
-            pointerStartRef.current = { x: event.clientX, y: event.clientY };
-          }}
-          onPointerUp={() => {
-            if (swipeOut) return;
-
-            pointerStartRef.current = null;
-
-            underlayRef.current?.style.setProperty('--swipe-opacity', '0');
-
-            const swipeAmount = Number(
-              paperRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0
-            );
-
+          onPointerDown={handlers.onSwipeStart}
+          onMouseMove={handlers.onSwipe}
+          onTouchMove={handlers.onSwipe}
+          // needs touchEnd for mobile because pointer end is cancelled by touch-actions, so we need to include mouseUp for desktop as well
+          onTouchEnd={handlers.onSwipeEnd}
+          onMouseUp={handlers.onSwipeEnd}
+          onClick={() => {
             const timeTaken = new Date().getTime() - dragStartTime.current?.getTime()! || 0;
-            const velocity = Math.abs(swipeAmount) / timeTaken;
-
-            // Remove only if threshold is met
-            if (Math.abs(swipeAmount) >= 75 || velocity > 0.11) {
-              if (swipeAmount > 0) {
-                toastRef.current?.style.setProperty('transition', 'all 300ms ease');
-                paperRef.current?.style.setProperty('transition', 'all 300ms ease');
-                toastRef.current?.style.setProperty('--swipe-amount', '0px');
-                underlayRef.current?.style.setProperty('--swipe-opacity', '1');
-                paperRef.current?.style.setProperty('--swipe-amount', '60px');
-                read(displayedOriginal);
-              } else {
-                setSwipeOut(true);
-                setTimeout(() => {
-                  handleOptimisticDelete();
-                }, 250);
-              }
-
-              return;
-            }
-
-            // reset
-            if (Math.abs(swipeAmount) > 0) {
-              swipesLeft && setSwipesLeft(false);
-              toastRef.current?.style.setProperty('--swipe-amount', '0px');
-              paperRef.current?.style.setProperty('--swipe-amount', '0px');
-            } else {
-              // toggle only when threshold is not met and no swipe has been made
-              setOpened(!opened);
-            }
-          }}
-          onPointerMove={(event) => {
-            if (!pointerStartRef.current) return;
-
-            const xPosition = event.clientX - pointerStartRef.current.x;
-
-            if (!allowSound && xPosition > 0) return;
-            if (!swipesLeft && xPosition > 0) setSwipesLeft(true);
-
-            let toastOffset = 0;
-
-            if (Math.abs(xPosition) > 80) {
-              toastOffset = xPosition + (xPosition < 0 ? 80 : -80);
-              toastRef.current?.style.setProperty('--swipe-amount', `${toastOffset}px`);
-            } else {
-              paperRef.current?.style.setProperty('--swipe-amount', `${xPosition}px`);
-            }
-
-            underlayRef.current?.style.setProperty(
-              '--swipe-opacity',
-              `${Math.abs(toastOffset / 100) + Math.abs(xPosition / 100) + 0.4}`
-            );
+            timeTaken < 500 && setOpened(!opened);
           }}
         >
-          <Paper
-            ref={paperRef}
-            className={classes.paper}
-            p={10}
-            px={20}
-
-            // onMouseDown={() => {
-            //   if (menuOpened) {
-            //     setMenuOpened(false);
-            //   } else {
-            //     timeOutRef.current = setTimeout(() => setMenuOpened(true), 600);
-            //   }
-            // }}
-            // onMouseUp={() => {
-            //   clearTimeout(timeOutRef.current);
-            // }}
-          >
+          <Paper ref={paperRef} className={classes.paper} p={10} px={20}>
             <Flex key={id} align={'center'} justify={'space-between'}>
               <div>
                 <Flex align={'center'}>
