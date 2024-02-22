@@ -2,12 +2,12 @@ main {
   background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9)) !important;
 }
 
-html {
+html body {
   background: var(--mantine-color-dark-9) !important;
+}
 
-  &[data-mantine-color-scheme='light'] {
-    background: var(--mantine-color-gray-0) !important;
-  }
+html[data-mantine-color-scheme='light'] body {
+  background: var(--mantine-color-gray-0) !important;
 }
 
 html,
