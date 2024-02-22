@@ -65,7 +65,7 @@
   top: 50%;
   left: 0;
   transform: translateY(-50%);
-  animation: out 200ms linear forwards;
+  animation: out 300ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
 @keyframes padding {
@@ -107,11 +107,12 @@
 }
 
 .logoWrapper {
-  animation: paddingReverse 200ms linear forwards;
+  animation: paddingReverse 400ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+
   &[data-account='true'] {
-    animation: padding 200ms linear forwards;
+    animation: padding 400ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
     .icon {
-      animation: in 200ms linear forwards;
+      animation: in 300ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
     }
   }
 }
