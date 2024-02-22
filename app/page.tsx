@@ -15,13 +15,22 @@ export default async function Index() {
   } = await supabase.auth.getUser();
 
   if (!user) redirect('/login');
-  const { data: entries } = await supabase.from('translations').select('*').order('created_at');
 
-  const { data: profileData } = await supabase
+  const entriesReq = supabase
+    .from('translations')
+    .select('id, translation, original, count, language')
+    .order('created_at');
+
+  const translationsReq = supabase
     .from('profiles')
     .select('languages, repetitions')
     .eq('user_id', user.id)
     .single();
+
+  const [{ data: entries }, { data: profileData }] = await Promise.all([
+    entriesReq,
+    translationsReq,
+  ]);
 
   return <AppContent entries={entries as TranslationEntry[]} profileData={profileData} />;
 }
