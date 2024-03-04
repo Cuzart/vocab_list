@@ -10,7 +10,6 @@ html[data-mantine-color-scheme='light'] body {
   background: var(--mantine-color-gray-0) !important;
 }
 
-html,
 body {
   overflow-x: hidden;
 }

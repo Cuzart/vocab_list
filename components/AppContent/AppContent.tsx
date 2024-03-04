@@ -40,11 +40,8 @@ export const AppContent = ({ entries: initialEntries, profileData }: Props) => {
     [entries, language]
   );
 
-  const containerRef = useRef<HTMLDivElement>(null);
   const scrollDown = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({ top: 9999, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 9999, behavior: 'smooth' });
   };
 
   return (
@@ -61,7 +58,6 @@ export const AppContent = ({ entries: initialEntries, profileData }: Props) => {
           languages={profileData?.languages}
         />
         <Stack
-          ref={containerRef}
           className={classes.stack}
           // h={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
           // mah={`calc(100dvh - 62px - env(safe-area-inset-bottom))`}
