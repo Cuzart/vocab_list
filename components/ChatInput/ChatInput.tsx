@@ -7,6 +7,7 @@ import { createTranslation } from '../../actions/createTranslation';
 import { countryData } from '../CountryPicker/CountryPicker';
 import { DirectionToggle } from '../DirectionToggle/DirectionToggle';
 import classes from './ChatInput.module.css';
+import useBoop from '@/hooks/useBoop';
 
 type ChatInputProps = {
   language: string;
@@ -68,6 +69,8 @@ export const ChatInput = ({
     }
   };
 
+  const [boopStyle, trigger] = useBoop({ rotation: 10, timing: 300 });
+
   return (
     <Box component={'form'} onSubmit={(e) => e.preventDefault()} className={classes.container}>
       <Container p={0}>
@@ -79,8 +82,16 @@ export const ChatInput = ({
           size='md'
           w={'100%'}
           radius={'sm'}
-          leftSection={<DirectionToggle switched={switched} setSwitched={setSwitched} />}
+          leftSection={
+            <DirectionToggle switched={switched} setSwitched={setSwitched} boopStyle={boopStyle} />
+          }
           leftSectionWidth={50}
+          leftSectionProps={{
+            onClick: () => {
+              setSwitched(!switched);
+              trigger();
+            },
+          }}
           rightSection={
             <ActionIcon
               type='submit'

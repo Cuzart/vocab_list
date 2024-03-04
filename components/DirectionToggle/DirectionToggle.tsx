@@ -7,23 +7,12 @@ import classes from './DirectionToggle.module.css';
 type Props = {
   switched: boolean;
   setSwitched: (hidden: boolean) => void;
+  boopStyle: React.CSSProperties;
 };
 
-export const DirectionToggle = ({ switched, setSwitched }: Props) => {
-  const [boopStyle, trigger] = useBoop({ rotation: 10, timing: 300 });
-
+export const DirectionToggle = ({ switched, setSwitched, boopStyle }: Props) => {
   return (
-    <ActionIcon
-      className={classes.button}
-      size={'lg'}
-      color='gray'
-      bg={'gray.0'}
-      onClick={() => {
-        setSwitched(!switched);
-        trigger();
-      }}
-      variant='outline'
-    >
+    <ActionIcon className={classes.button} size={'lg'} color='gray' variant='outline'>
       <Indicator disabled={!switched} size={8}>
         <animated.div style={boopStyle}>
           <IconArrowsLeftRight size={18} />
