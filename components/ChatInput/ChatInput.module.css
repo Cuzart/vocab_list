@@ -4,14 +4,13 @@
   left: 0;
   width: 100%;
   gap: 0.5rem;
-
   z-index: 600;
-
-  padding-top: 0.625rem;
+  /* padding-top: 0.625rem; */
   padding-bottom: calc(env(safe-area-inset-bottom) + 0.625rem);
   padding-left: calc(env(safe-area-inset-left) + 1.25rem);
   padding-right: calc(env(safe-area-inset-right) + 1.25rem);
   background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9));
+  background-color: transparent !important;
 
   transition: padding 200ms ease;
 }
@@ -19,6 +18,21 @@
 .container .dropdown {
   border: none;
   background: transparent;
+}
+
+.container::before {
+  position: fixed;
+  content: '';
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.625rem + 1rem);
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9));
+}
+
+.input {
+  border-radius: 20px;
 }
 
 .input:focus-within {

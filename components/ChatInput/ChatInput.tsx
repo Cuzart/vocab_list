@@ -93,6 +93,7 @@ export const ChatInput = ({
               style={{
                 transition: 'all 0.2s ease',
                 transform: isReadyToBeSent ? 'translateX(0px)' : 'translateX(-4px)',
+                borderRadius: '50%',
               }}
             >
               <IconArrowNarrowRight />

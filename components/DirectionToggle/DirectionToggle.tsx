@@ -15,11 +15,14 @@ export const DirectionToggle = ({ switched, setSwitched }: Props) => {
   return (
     <ActionIcon
       className={classes.button}
-      size={40}
+      size={'lg'}
       color='gray'
-      onClick={() => setSwitched(!switched)}
+      bg={'gray.0'}
+      onClick={() => {
+        setSwitched(!switched);
+        trigger();
+      }}
       variant='outline'
-      onMouseEnter={trigger}
     >
       <Indicator disabled={!switched} size={8}>
         <animated.div style={boopStyle}>
