@@ -5,6 +5,7 @@ import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/c
 import { IconArrowUp, IconTrash, IconVolume } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import classes from './TranslationItem.module.css';
+import { useOs } from '@mantine/hooks';
 
 type Props = {
   id: string | number;
@@ -33,6 +34,9 @@ export const TranslationItem = ({
 }: Props) => {
   const [opened, setOpened] = React.useState(false);
   const [count, setCount] = React.useState(initialCount || 0);
+
+  const os = useOs();
+  if (os !== 'ios') allowSound = true;
 
   useEffect(() => {
     visible !== undefined && setOpened(visible);

@@ -4,7 +4,7 @@ import useBoop from '@/hooks/useBoop';
 import EmptyState from '@/public/empty.svg';
 import { LanguageEnum, TranslationEntry } from '@/types';
 import { ActionIcon, Box, Center, Flex, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
+import { useLocalStorage, useOs } from '@mantine/hooks';
 import { IconArrowLeft, IconUser, IconVocabulary } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -145,6 +145,9 @@ export const AppHeader = ({
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const os = useOs();
+
   return (
     <Group
       className={classes.header}
@@ -171,7 +174,9 @@ export const AppHeader = ({
         </Flex>
       </Link>
       <Flex gap={10}>
-        {setAllowSound && <SoundToggle allowSound={allowSound!} setAllowSound={setAllowSound!} />}
+        {setAllowSound && os === 'ios' && (
+          <SoundToggle allowSound={allowSound!} setAllowSound={setAllowSound!} />
+        )}
         {setHidden && <HideToggle hidden={hidden!} setHidden={setHidden} />}
         {!isIndex && <ThemeToggle />}
         {setLanguage && (
