@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         >
           <ClientProvider>
-            <Toaster position='top-right' />
+            <Toaster position='bottom-right' />
 
             <main>
               <Container pos={'relative'} p={0}>
