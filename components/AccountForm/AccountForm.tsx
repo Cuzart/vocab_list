@@ -29,7 +29,7 @@ import {
 } from '@tabler/icons-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import { BoopButton } from '../BoopButton/BoopButton';
 import classes from './AccountForm.module.css';
 
@@ -119,7 +119,6 @@ export const AccountForm = ({ user, profileData }: Props) => {
 
   return (
     <>
-      <Toaster />
       <Box className={classes.container}>
         <AppHeader />
 

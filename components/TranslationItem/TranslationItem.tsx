@@ -1,11 +1,13 @@
 import { deleteTranslation } from '@/actions/deleteTranslation';
+import { editTranslation } from '@/actions/editTranslation';
 import { increaseTranslationCount } from '@/actions/increaseTranslationCount';
 import { TranslationEntry } from '@/types';
-import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text } from '@mantine/core';
+import { ActionIcon, Box, Collapse, Flex, Loader, Paper, Text, TextInput } from '@mantine/core';
+import { useOs } from '@mantine/hooks';
 import { IconArrowUp, IconTrash, IconVolume } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
+import { toast } from 'sonner';
 import classes from './TranslationItem.module.css';
-import { useOs } from '@mantine/hooks';
 
 type Props = {
   id: string | number;
@@ -166,6 +168,13 @@ export const TranslationItem = ({
     },
   };
 
+  const [edit, setEdit] = React.useState('');
+  const [editActive, setEditActive] = React.useState(false);
+
+  useEffect(() => {
+    setEdit(displayedTranslation);
+  }, [displayedTranslation]);
+
   return (
     <>
       {count < repetitionLimit && (
@@ -193,13 +202,84 @@ export const TranslationItem = ({
                   <Text fw={500}>{displayedOriginal}</Text>
                 </Flex>
                 <Collapse in={opened}>
-                  <Text c={'dimmed'}>
+                  <Box c={'dimmed'}>
                     {displayedTranslation === '...' ? (
                       <Loader ml={4} size={24.8} type='dots' />
                     ) : (
-                      displayedTranslation
+                      <>
+                        {editActive ? (
+                          <TextInput
+                            autoFocus
+                            value={edit}
+                            onChange={(e) => setEdit(e.currentTarget.value)}
+                            variant='unstyled'
+                            p={0}
+                            onClick={(e) => e.stopPropagation()}
+                            size='xs'
+                            w={'fit-content'}
+                            styles={{
+                              input: {
+                                fontSize: '1rem',
+                                minHeight: 'unset',
+                                maxHeight: 'calc(var(--mantine-line-height) * 1rem)',
+                                lineHeight: 'var(--mantine-line-height)',
+                                border: 'none',
+                                minWidth: '80px',
+                                width: edit.length + 2 + 'ch',
+                              },
+                            }}
+                            onBlur={() => {
+                              if (edit === displayedTranslation || edit === '') {
+                                setEditActive(false);
+                                if (edit === '') setEdit(displayedTranslation);
+                                return;
+                              }
+                              const oldWord = displayedTranslation;
+
+                              // optimistic update
+                              setEntries((prev) => {
+                                const index = prev!.findIndex((entry) => entry.id === id);
+                                const newEntries = [...prev!];
+                                newEntries[index][switched ? 'original' : 'translation'] =
+                                  edit.trim();
+                                return newEntries;
+                              });
+
+                              toast.success('Änderung gespeichert', {
+                                duration: 3200,
+                                onDismiss: () =>
+                                  editTranslation({ id: id as number, edit, switched }),
+                                onAutoClose: () =>
+                                  editTranslation({ id: id as number, edit, switched }),
+                                action: {
+                                  label: 'Rückgängig',
+                                  onClick: () => {
+                                    setEntries((prev) => {
+                                      // optimistic update rollback
+                                      const index = prev!.findIndex((entry) => entry.id === id);
+                                      const newEntries = [...prev!];
+                                      newEntries[index][switched ? 'original' : 'translation'] =
+                                        oldWord;
+                                      return newEntries;
+                                    });
+                                  },
+                                },
+                              });
+                            }}
+                          />
+                        ) : (
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditActive(true);
+                            }}
+                          >
+                            {edit}
+                          </span>
+                        )}
+                      </>
                     )}
-                  </Text>
+                  </Box>
                 </Collapse>
               </div>
 

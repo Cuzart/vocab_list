@@ -1,11 +1,12 @@
+import { ClientProvider } from '@/components/ClientProvider';
 import { ColorSchemeScript, Container, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { GeistSans } from 'geist/font/sans';
 import { Viewport } from 'next';
 import { Space_Grotesk as BodyFont, Eczar as HeadingFont } from 'next/font/google';
 import { cookies } from 'next/headers';
+import { Toaster } from 'sonner';
 import './globals.css';
-import { ClientProvider } from '@/components/ClientProvider';
 
 const headingFont = HeadingFont({ weight: ['400', '700'], subsets: ['latin'] });
 const bodyFont = BodyFont({ weight: ['400', '500', '700'], subsets: ['latin'] });
@@ -48,6 +49,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         >
           <ClientProvider>
+            <Toaster position='top-right' />
+
             <main>
               <Container pos={'relative'} p={0}>
                 {children}
