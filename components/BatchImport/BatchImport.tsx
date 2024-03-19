@@ -66,6 +66,11 @@ export const BatchImport = () => {
               : `${countryLabel}\n${countryLabel}=Deutsch`
           }
           minRows={5}
+          maxRows={25}
+          maxLength={2000}
+          inputWrapperOrder={['label', 'input', 'description', 'error']}
+          description={content.length + '/2000'}
+          descriptionProps={{ align: 'right' }}
           autosize
         />
 
