@@ -92,9 +92,8 @@ export const BatchImport = () => {
               target: 'de',
               switched,
             })) && router.refresh();
-            setLoading(false);
-            setContent('');
-            close();
+
+            router.push('/');
           }}
         />
       </Modal>

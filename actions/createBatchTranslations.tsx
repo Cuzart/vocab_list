@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { SourceLanguageCode, TargetLanguageCode, Translator } from 'deepl-node';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 type Params = {
@@ -49,8 +50,8 @@ export async function createBatchTranslations({ text, source, target, switched }
       : [];
 
   const newTranslations = singleWord.map((entry, index) => ({
-    original: entry.trim(),
-    translation: result[index].text.trim(),
+    original: switched ? result[index].text.trim() : entry.trim(),
+    translation: switched ? entry.trim() : result[index].text.trim(),
     created_by: user?.id,
     language: source,
   }));
@@ -71,5 +72,6 @@ export async function createBatchTranslations({ text, source, target, switched }
     return false;
   }
 
+  revalidatePath('/');
   return true;
 }
