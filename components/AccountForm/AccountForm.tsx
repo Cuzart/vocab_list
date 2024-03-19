@@ -30,6 +30,7 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { BatchImport } from '../BatchImport/BatchImport';
 import { BoopButton } from '../BoopButton/BoopButton';
 import classes from './AccountForm.module.css';
 
@@ -205,7 +206,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
               <MultiSelect
                 mb={30}
                 label='Sprachen'
-                data={countryData}
+                data={countryData.filter((entry) => entry.value !== 'de')}
                 value={value}
                 onChange={setValue}
                 hidePickedOptions
@@ -231,6 +232,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
                   { value: 10, label: '10' },
                 ]}
               />
+              <BatchImport />
             </Box>
           </Box>
 

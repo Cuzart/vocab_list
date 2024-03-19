@@ -1,6 +1,6 @@
 import { LanguageEnum } from '@/types';
 import { Group, Menu, UnstyledButton } from '@mantine/core';
-import { IconChevronDown } from '@tabler/icons-react';
+import { IconChevronDown, IconLock } from '@tabler/icons-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import classes from './CountryPicker.module.css';
@@ -23,15 +23,17 @@ export const countryData = [
   { value: 'sv', label: 'Schwedisch', image: images.se },
   { value: 'es', label: 'Spanisch', image: images.es },
   { value: 'tr', label: 'Türkisch', image: images.tr },
+  { value: 'de', label: 'Deutsch', image: images.de },
 ];
 
 type Props = {
   language: LanguageEnum;
   setLanguage: (language: LanguageEnum) => void;
   languages?: LanguageEnum[];
+  readonly?: boolean;
 };
 
-export function CountryPicker({ language, setLanguage, languages }: Props) {
+export function CountryPicker({ language, setLanguage, languages, readonly }: Props) {
   const data = countryData.filter((item) => languages?.includes(item.value as LanguageEnum));
 
   const [opened, setOpened] = useState(false);
@@ -70,7 +72,11 @@ export function CountryPicker({ language, setLanguage, languages }: Props) {
       transitionProps={{ transition: 'scale-y' }}
     >
       <Menu.Target>
-        <UnstyledButton className={classes.control} data-expanded={opened || undefined}>
+        <UnstyledButton
+          className={classes.control}
+          data-expanded={opened || undefined}
+          style={{ pointerEvents: readonly ? 'none' : undefined }}
+        >
           <Group gap='xs'>
             <Image
               src={selected.image}
@@ -82,7 +88,11 @@ export function CountryPicker({ language, setLanguage, languages }: Props) {
 
             <span className={classes.label}>{selected?.label}</span>
           </Group>
-          <IconChevronDown size='1rem' className={classes.icon} />
+          {readonly ? (
+            <IconLock size='1rem' className={classes.icon} />
+          ) : (
+            <IconChevronDown size='1rem' className={classes.icon} />
+          )}
         </UnstyledButton>
       </Menu.Target>
 
