@@ -72,12 +72,7 @@ export const ChatInput = ({
   const [boopStyle, trigger] = useBoop({ rotation: 10, timing: 300 });
 
   return (
-    <Box
-      maw={960}
-      component={'form'}
-      onSubmit={(e) => e.preventDefault()}
-      className={classes.container}
-    >
+    <Box component={'form'} onSubmit={(e) => e.preventDefault()} className={classes.container}>
       <Container p={0}>
         <TextInput
           classNames={{ input: classes.input }}

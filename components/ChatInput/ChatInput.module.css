@@ -1,10 +1,13 @@
 .container {
   position: fixed;
   bottom: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   gap: 0.5rem;
   z-index: 600;
+  max-width: 60rem;
+
   /* padding-top: 0.625rem; */
   padding-bottom: calc(env(safe-area-inset-bottom) + 0.625rem);
   padding-left: calc(env(safe-area-inset-left) + 1.25rem);
