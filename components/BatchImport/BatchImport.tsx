@@ -8,7 +8,11 @@ import { useMemo, useState } from 'react';
 import { CountryPicker, countryData } from '../CountryPicker/CountryPicker';
 import { DirectionToggle } from '../DirectionToggle/DirectionToggle';
 
-export const BatchImport = () => {
+type Props = {
+  languages: LanguageEnum[];
+};
+
+export const BatchImport = ({ languages }: Props) => {
   const router = useRouter();
   const [opened, { open, close }] = useDisclosure(false);
   const [lang, setLang] = useState<LanguageEnum>('en');
@@ -50,11 +54,7 @@ export const BatchImport = () => {
           >
             <DirectionToggle switched={switched} setSwitched={setSwitched} boopStyle={style} />
           </UnstyledButton>
-          <CountryPicker
-            language={lang}
-            setLanguage={setLang}
-            languages={countryData.map((entry) => entry.value) as LanguageEnum[]}
-          />
+          <CountryPicker language={lang} setLanguage={setLang} languages={languages} />
         </Flex>
         <Textarea
           mt={20}

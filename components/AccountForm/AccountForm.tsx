@@ -33,6 +33,7 @@ import { toast } from 'sonner';
 import { BatchImport } from '../BatchImport/BatchImport';
 import { BoopButton } from '../BoopButton/BoopButton';
 import classes from './AccountForm.module.css';
+import { LanguageEnum } from '@/types';
 
 type Props = {
   user: User;
@@ -232,7 +233,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
                   { value: 10, label: '10' },
                 ]}
               />
-              <BatchImport />
+              <BatchImport languages={value as LanguageEnum[]} />
             </Box>
           </Box>
 
