@@ -28,6 +28,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   cookies();
+
   return (
     <html lang='de' className={GeistSans.className}>
       <head>
