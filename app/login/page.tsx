@@ -3,7 +3,6 @@ import { Alert, Anchor, Box, Button, Center, PasswordInput, TextInput, Title } f
 import { cookies, headers } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import Xyz from './loading';
 
 export default async function Login({ searchParams }: { searchParams: { message: string } }) {
   const signIn = async (formData: FormData) => {
@@ -59,7 +58,6 @@ export default async function Login({ searchParams }: { searchParams: { message:
 
   if (user) redirect('/');
 
-  return <Xyz></Xyz>;
   return (
     <Center component='form' h={'100dvh'} w={'100%'} py={160} px={20} action={signIn}>
       <Box w={'500px'}>
