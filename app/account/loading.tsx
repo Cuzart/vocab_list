@@ -37,14 +37,14 @@ export default async function Index() {
           </Text>
 
           <Skeleton width={100} height={16} mb={10} />
-          <Skeleton width={400} height={36} mb={20} />
+          <Skeleton w={'100%'} maw={400} height={36} mb={20} />
 
           <Box maw={400}>
             <Text mt={30} fz={20} fw={700} mb={20}>
               App-Einstellungen
             </Text>
             <Skeleton width={100} height={16} mb={10} />
-            <Skeleton width={400} height={60} mb={20} />
+            <Skeleton w={'100%'} maw={400} height={60} mb={20} />
           </Box>
         </Box>
       </Flex>
