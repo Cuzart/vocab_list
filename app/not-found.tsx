@@ -1,7 +1,7 @@
+import EmptyState from '@/public/empty.svg';
 import { Button, Center, Text, Title } from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
-import EmptyState from '@/public/empty.svg';
 
 export default async function NotFound() {
   return (

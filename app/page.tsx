@@ -2,7 +2,6 @@ import { AppContent } from '@/components/AppContent/AppContent';
 import { TranslationEntry } from '@/types';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,8 +13,6 @@ export default async function Index() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect('/login');
-
   const entriesReq = supabase
     .from('translations')
     .select('id, translation, original, count, language')
@@ -24,7 +21,7 @@ export default async function Index() {
   const translationsReq = supabase
     .from('profiles')
     .select('languages, repetitions')
-    .eq('user_id', user.id)
+    .eq('user_id', user?.id)
     .single();
 
   const [{ data: entries }, { data: profileData }] = await Promise.all([

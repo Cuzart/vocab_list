@@ -1,0 +1,40 @@
+.wrapper {
+  margin-top: 0;
+  max-width: 1000px;
+  padding-top: 3rem;
+  padding-bottom: 7.5rem;
+  margin: auto;
+}
+
+#legal h1 {
+  display: block;
+  font-size: 2rem;
+  font-weight: 900;
+  margin-top: 0;
+
+  @media screen and (min-width: 768px) {
+    font-size: 3rem;
+  }
+}
+#legal h2 {
+  font-size: 1.5rem;
+}
+#legal h3 {
+  font-size: 1.25rem;
+}
+
+#legal p {
+  margin: 20px 0;
+  opacity: 0.85;
+}
+
+#legal hr {
+  margin: 2rem 0;
+  opacity: 0.6;
+}
+
+#legal ul {
+  padding-left: 10px;
+  margin: 2rem 0;
+  line-height: 1.5;
+}

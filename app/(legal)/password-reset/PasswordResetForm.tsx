@@ -1,9 +1,9 @@
 'use client';
 
 import { createClient } from '@/utils/supabase/client';
-import { Button, TextInput, Text } from '@mantine/core';
+import { Button, Text, TextInput } from '@mantine/core';
 import { isEmail, useForm } from '@mantine/form';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export const PasswordResetForm = () => {
   const form = useForm({

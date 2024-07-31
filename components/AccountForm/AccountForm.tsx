@@ -93,7 +93,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.refresh();
+    router.push('/login');
   };
 
   const handleProfileUpdate = async () => {

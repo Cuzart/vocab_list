@@ -1,3 +1,4 @@
+import { Footer } from '@/components/Footer/Footer';
 import { createClient } from '@/utils/supabase/server';
 import { Alert, Anchor, Box, Button, Center, PasswordInput, TextInput, Title } from '@mantine/core';
 import { cookies, headers } from 'next/headers';
@@ -52,39 +53,44 @@ export default async function Login({ searchParams }: { searchParams: { message:
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user) redirect('/');
-
   return (
-    <Center component='form' h={'100dvh'} w={'100%'} py={160} px={20} action={signIn}>
-      <Box w={'500px'}>
-        <Title ta={'center'} mb={30}>
-          Login
-        </Title>
-        <TextInput mb={20} label='Email' name='email' required />
-        <PasswordInput mb={30} label='Passwort' name='password' required />
-        <Alert mb={20} title={searchParams.message} hidden={!searchParams?.message} color='red' />
+    <>
+      <Center
+        component='form'
+        h={'calc(100dvh - 3.75rem)'}
+        w={'100%'}
+        py={160}
+        px={20}
+        action={signIn}
+      >
+        <Box w={'500px'}>
+          <Title ta={'center'} mb={30}>
+            Login
+          </Title>
+          <TextInput mb={20} label='Email' name='email' required />
+          <PasswordInput mb={30} label='Passwort' name='password' required />
+          <Alert mb={20} title={searchParams.message} hidden={!searchParams?.message} color='red' />
 
-        <Anchor
-          display={'block'}
-          ta={'center'}
-          component={Link}
-          href='/password-reset'
-          mb={20}
-          variant='subtle'
-        >
-          Passwort vergessen?
-        </Anchor>
-        <Button type='submit' fullWidth mb={20}>
-          Sign In
-        </Button>
-        <Button type='submit' formAction={signUp} variant='subtle' fullWidth>
-          Sign Up
-        </Button>
-      </Box>
-    </Center>
+          <Anchor
+            display={'block'}
+            ta={'center'}
+            component={Link}
+            href='/password-reset'
+            mb={20}
+            variant='subtle'
+          >
+            Passwort vergessen?
+          </Anchor>
+          <Button type='submit' fullWidth mb={20}>
+            Sign In
+          </Button>
+          <Button type='submit' formAction={signUp} variant='subtle' fullWidth>
+            Sign Up
+          </Button>
+        </Box>
+      </Center>
+
+      <Footer />
+    </>
   );
 }
