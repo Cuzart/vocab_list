@@ -22,7 +22,7 @@ export default function ImprintPage() {
           <div className='wrapper'>
             <h1>Impressum</h1>
 
-            <h2>Angaben gem&auml;&szlig; &sect; 5 TMG</h2>
+            {/* <h2>Angaben gem&auml;&szlig; &sect; 5 TMG</h2> */}
             <p>
               {config.name}
               <br />
