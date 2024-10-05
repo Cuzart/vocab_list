@@ -7,7 +7,7 @@ export default async function Index() {
     <Box py={120} h={'100dvh'} px={20}>
       <BackButton />
 
-      <Title>Passwort zurücksetzen</Title>
+      <Title mt={48}>Passwort zurücksetzen</Title>
       <PasswordResetForm />
     </Box>
   );
