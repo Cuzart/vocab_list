@@ -48,21 +48,12 @@ export default async function Login({ searchParams }: { searchParams: { message:
       return redirect('/login?message=Bitte überprüfe deine Anmeldedaten');
     }
 
-    return redirect('/login?message=Bitte überprüfe deine Anmeldedaten');
+    return redirect('/');
   };
-
-  const cookieStore = cookies();
 
   return (
     <>
-      <Center
-        component='form'
-        action={signIn}
-        h={'calc(100dvh - 3.75rem)'}
-        w={'100%'}
-        py={160}
-        px={20}
-      >
+      <Center component='form' h={'calc(100dvh - 3.75rem)'} w={'100%'} py={160} px={20}>
         <Box w={'500px'}>
           <Title ta={'center'} mb={30}>
             Login
