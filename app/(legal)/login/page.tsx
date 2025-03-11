@@ -44,6 +44,7 @@ export default async function Login({ searchParams }: { searchParams: { message:
     });
 
     if (error) {
+      console.log(error);
       return redirect('/login?message=Bitte überprüfe deine Anmeldedaten');
     }
 
@@ -51,17 +52,16 @@ export default async function Login({ searchParams }: { searchParams: { message:
   };
 
   const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
 
   return (
     <>
       <Center
         component='form'
+        action={signIn}
         h={'calc(100dvh - 3.75rem)'}
         w={'100%'}
         py={160}
         px={20}
-        action={signIn}
       >
         <Box w={'500px'}>
           <Title ta={'center'} mb={30}>
@@ -81,10 +81,10 @@ export default async function Login({ searchParams }: { searchParams: { message:
           >
             Passwort vergessen?
           </Anchor>
-          <Button type='submit' fullWidth mb={20}>
+          <Button type='submit' formAction={signIn} fullWidth mb={20}>
             Sign In
           </Button>
-          <Button type='submit' formAction={signUp} variant='subtle' fullWidth>
+          <Button type='submit' variant='subtle' formAction={signUp} fullWidth>
             Sign Up
           </Button>
         </Box>
