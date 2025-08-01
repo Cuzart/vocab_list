@@ -1,12 +1,14 @@
 import { createBatchTranslations } from '@/actions/createBatchTranslations';
 import useBoop from '@/hooks/useBoop';
 import { LanguageEnum } from '@/types';
-import { Button, Flex, Modal, Textarea, UnstyledButton } from '@mantine/core';
+import { Button, Flex, Modal, Textarea, UnstyledButton, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { CountryPicker, countryData } from '../CountryPicker/CountryPicker';
 import { DirectionToggle } from '../DirectionToggle/DirectionToggle';
+import { IconCheck, IconFileImport } from '@tabler/icons-react';
+import { BoopButton } from '../BoopButton/BoopButton';
 
 type Props = {
   languages: LanguageEnum[];
@@ -29,9 +31,12 @@ export const BatchImport = ({ languages }: Props) => {
 
   return (
     <>
-      <Button variant='outline' mt={30} onClick={open}>
+      <Text mt={60} mb={20}>
+        Mit dem Batch Import kannst du ganz einfach mehrere Übersetzungen auf einmal importieren.
+      </Text>
+      <BoopButton variant='outline' onClick={open} icon={<IconFileImport />}>
         Batch Import
-      </Button>
+      </BoopButton>
       <Modal title={'Batch Import'} opened={opened} onClose={close}>
         <Flex
           gap={5}
@@ -74,11 +79,10 @@ export const BatchImport = ({ languages }: Props) => {
           autosize
         />
 
-        <Button
+        <BoopButton
           mt={20}
           ml={'auto'}
           display={'block'}
-          children='Anlegen'
           loading={loading}
           disabled={!content}
           onClick={async () => {
@@ -95,7 +99,10 @@ export const BatchImport = ({ languages }: Props) => {
 
             router.push('/');
           }}
-        />
+          icon={<IconCheck />}
+        >
+          Anlegen
+        </BoopButton>
       </Modal>
     </>
   );

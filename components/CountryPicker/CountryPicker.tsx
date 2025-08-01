@@ -37,7 +37,7 @@ export function CountryPicker({ language, setLanguage, languages, readonly }: Pr
   const data = countryData.filter((item) => languages?.includes(item.value as LanguageEnum));
 
   const [opened, setOpened] = useState(false);
-  const [selected, setSelected] = useState(countryData[0]);
+  const [selected, setSelected] = useState<(typeof countryData)[number] | null>(null);
 
   useEffect(() => {
     const item = data.find((item) => item.value === language);
@@ -78,13 +78,15 @@ export function CountryPicker({ language, setLanguage, languages, readonly }: Pr
           style={{ pointerEvents: readonly ? 'none' : undefined }}
         >
           <Group gap='xs'>
-            <Image
-              src={selected.image}
-              alt={selected.label}
-              width={20}
-              height={15}
-              className={classes.flag}
-            />
+            {selected && (
+              <Image
+                src={selected.image}
+                alt={selected.label}
+                width={20}
+                height={15}
+                className={classes.flag}
+              />
+            )}
 
             <span className={classes.label}>{selected?.label}</span>
           </Group>

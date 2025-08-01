@@ -124,11 +124,14 @@ export const AccountForm = ({ user, profileData }: Props) => {
       <Box className={classes.container}>
         <AppHeader />
 
-        <Flex
-          justify={'space-between'}
-          align={'center'}
-          style={{ flexWrap: 'wrap' }}
-          gap={30}
+        <Box
+          mt={30}
+          maw={500}
+          mx={'auto'}
+          // justify={'space-between'}
+          // align={'center'}
+          // style={{ flexWrap: 'wrap' }}
+          // gap={30}
           pb={50}
         >
           <Box style={{ flexGrow: 1, alignSelf: 'flex-start' }}>
@@ -137,7 +140,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
             </Text>
 
             <TextInput
-              maw={400}
+              maw={500}
               w={'100%'}
               label='Email Adresse'
               readOnly
@@ -147,7 +150,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
             />
             {changePassword === 'email' && (
               <TextInput
-                maw={400}
+                maw={500}
                 w={'100%'}
                 label='Neue Email Adresse'
                 required
@@ -157,14 +160,14 @@ export const AccountForm = ({ user, profileData }: Props) => {
 
             {changePassword === 'password' && (
               <Fragment>
-                <Divider w={'100%'} maw={400} my={20} />
+                <Divider w={'100%'} my={20} />
 
                 <Text fz={20} fw={700} mb={20}>
                   Passwort ändern
                 </Text>
 
                 <PasswordInput
-                  maw={400}
+                  maw={500}
                   w={'100%'}
                   label='Neues Passwort'
                   required
@@ -172,7 +175,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
                   {...form.getInputProps('password')}
                 />
                 <PasswordInput
-                  maw={400}
+                  maw={500}
                   w={'100%'}
                   label='Passwort wiederholen'
                   required
@@ -180,8 +183,8 @@ export const AccountForm = ({ user, profileData }: Props) => {
                 />
               </Fragment>
             )}
-            <Flex mt={20} justify={'space-between'} gap={10} w={'100%'} maw={400}>
-              {changePassword !== null && (
+            {changePassword !== null && (
+              <Flex my={20} justify={'space-between'} gap={10} w={'100%'} maw={500}>
                 <>
                   <Button
                     leftSection={<IconX />}
@@ -197,10 +200,11 @@ export const AccountForm = ({ user, profileData }: Props) => {
                     children='Speichern'
                   />
                 </>
-              )}
-            </Flex>
+              </Flex>
+            )}
 
-            <Box maw={400}>
+            <Divider my={30} />
+            <Box maw={500}>
               <Text mt={30} fz={20} fw={700} mb={20}>
                 App-Einstellungen
               </Text>
@@ -237,6 +241,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
             </Box>
           </Box>
 
+          <Divider my={60} />
           <Flex
             direction={'column'}
             align={'flex-start'}
@@ -279,7 +284,7 @@ export const AccountForm = ({ user, profileData }: Props) => {
               children={'Account löschen'}
             />
           </Flex>
-        </Flex>
+        </Box>
       </Box>
 
       <Modal opened={opened} onClose={close} title='Account wirklich löschen?'>
